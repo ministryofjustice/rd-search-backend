@@ -1,0 +1,69 @@
+services:
+
+  frontend:
+    build:
+      dockerfile: frontend/Dockerfile
+      context: .
+    restart: always
+    ports:
+      - 8080:8080
+    environment:
+      API_URL: http://api:8081
+      FRONTEND_SESSION_KEY: testtesttest
+    depends_on:
+      api:
+        condition: service_healthy
+
+  api:
+    build:
+      dockerfile: api/Dockerfile
+      context: .
+    restart: always
+    ports:
+      - 8081:8081
+    environment:
+      AWS_ACCESS_KEY_ID: localstack
+      AWS_SECRET_ACCESS_KEY: localstack
+      AWS_URL_S3: http://localstack:4566
+      AWS_REGION: eu-west-2
+      S3_BUCKET: mojap-rd
+      S3_KEY_PREFIX: gdd_capability
+      S3_REGION: eu-west-1
+      BEDROCK_REGION: eu-west-3
+
+      # format: http://<AWS_URL>/<AWS_REGION>/es/<OPENSEARCH_DOMAIN>
+      # AWS_URL and AWS_REGION are set as env vars (above); es = "elasticsearch";
+      # <OPENSEARCH_DOMAIN> should match OPENSEARCH_DOMAIN env var in the localstack container;
+      # in the Cloud Platform, this URL is derived from a secret instead
+      OPENSEARCH_URL: http://localstack:4566/opensearch/eu-west-2/rd-hr
+
+      # which query service implementation to use
+      QUERY_SERVICE: hybrid
+    depends_on:
+      localstack:
+        condition: service_healthy
+
+  localstack:
+    image: localstack/localstack:3
+    volumes:
+      - "./scripts/localstack/init:/etc/localstack/init/ready.d"
+      - "./scripts/localstack/wait:/scripts/wait"
+    environment:
+      # this ensures that opensearch domain endpoints have the pattern
+      # http://localstack:4566/<engine-type>/<region>/<domain-name>;
+      # see https://docs.localstack.cloud/user-guide/aws/opensearch/
+      OPENSEARCH_ENDPOINT_STRATEGY: path
+
+      OPENSEARCH_DOMAIN: rd-hr
+
+      AWS_DEFAULT_REGION: eu-west-2
+      S3_BUCKET: mojap-rd
+      S3_KEY_PREFIX: gdd_capability
+    healthcheck:
+      test: bash /scripts/wait/healthcheck.sh
+      interval: 5s
+      timeout: 10s
+      retries: 10
+    ports:
+      - 4566:4566
+    restart: unless-stopped

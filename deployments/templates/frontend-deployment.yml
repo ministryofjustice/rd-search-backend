@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-deployment
+  labels:
+    app: frontend
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: frontend # this should match the selector in frontend-service.yml
+  template:
+    metadata:
+      labels:
+        app: frontend # this should match the selector in frontend-service.yml
+    spec:
+      containers:
+        - name: frontend
+          image: ${REGISTRY}/${REPOSITORY}:${FRONTEND_IMAGE_TAG}
+          ports:
+            - containerPort: 8080
+          env:
+            - name: API_URL
+              value: "http://api-service:8081"
+            - name: FRONTEND_SESSION_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: frontend
+                  key: session_key

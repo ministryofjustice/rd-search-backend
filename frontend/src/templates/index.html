@@ -1,0 +1,98 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <form method="POST">
+        <div class="container grey-rounded-border">
+            <p><label for="question">Ask a question</label></p>
+            <p><input type="text" id="question" name="question" class="grey-box grey-rounded-border"></p>
+            <p><input type="submit" class="grey-rounded-border"></p>
+        </div>
+    </form>
+
+    {% if question %}
+        <div class="container">
+            <h2>Your question</h2>
+            <p class="large-font">&quot;{{ question }}&quot;</p>
+        </div>
+
+        {% if question_response == None %}
+            <div class="container">
+                <h2>We couldn't find an answer for your question</h2>
+                <p>
+                    This tool is trained using HR documents published by Government Digital and Data.
+                    Your question may not have an answer available in these documents.
+                </p>
+
+                <p>Send your question to a member of the HR Capability team to get a response from them.</p>
+            </div>
+        {% else %}
+            <div class="container">
+                <h2>Suggested answer</h2>
+                <p>{{ question_response.answer }}</p>
+            </div>
+
+            <div class="container">
+                <h2>Sources</h2>
+                <ul>
+                    {% for source in question_response.sources %}
+                        <li><a href="{{ source.url }}">{{ source.title }}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+
+        <div id="feedback-form-container"></div>
+
+        <script type="text/javascript">
+            const updateFeedbackDiv = (container, postData) => {
+                let options = {}
+
+                if (postData !== undefined && postData !== null) {
+                    options = {
+                        "method": "POST",
+                        "body": postData,
+                    }
+                }
+
+                fetch("./feedback", options).then((response) => {
+                    return response.text()
+                }).then((text) => {
+                    container.innerHTML = text
+
+                    let formElt = container.querySelector("form")
+
+                    if (formElt !== null) {
+                        formElt.addEventListener("submit", (evt) => {
+                            evt.preventDefault()
+
+                            let data = new FormData(formElt)
+
+                            // capture the original question
+                            data.set("original-question-asked", "{{ question }}")
+
+                            // capture the submit button's value as it's pressed
+                            data.set("question-answered", evt.submitter.value)
+
+                            console.log(data)
+
+                            // refresh the content of the feedback section of the page
+                            updateFeedbackDiv(container, data)
+
+                            return false
+                        })
+                    }
+                })
+            }
+
+            // if there are no answers, skip straight to showing the form to send a question to HR
+            let postData
+            if ({{ question_has_response }} === 0) {
+                postData = new FormData()
+                postData.set("question-answered", "NoAnswerAvailable")
+                postData.set("original-question-asked", "{{question}}")
+            }
+
+            updateFeedbackDiv(document.querySelector("#feedback-form-container"), postData)
+        </script>
+    {% endif %}
+{% endblock %}

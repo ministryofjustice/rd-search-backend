@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-deployment
+  labels:
+    app: api
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: api # this should match the selector in frontend-service.yml
+  template:
+    metadata:
+      labels:
+        app: api # this should match the selector in frontend-service.yml
+    spec:
+      serviceAccountName: rd-hr-smart-knowledge-management-dev-sa
+      containers:
+        - name: api
+          image: ${REGISTRY}/${REPOSITORY}:${API_IMAGE_TAG}
+          resources:
+            requests:
+              memory: "8Gi"
+            limits:
+              memory: "8Gi"
+          ports:
+            - containerPort: 8081
+          env:
+            - name: OPENSEARCH_URL
+              valueFrom:
+                secretKeyRef:
+                  name: research-and-development-opensearch-proxy-url
+                  key: proxy_url
+            - name: QUERY_SERVICE
+              value: bedrock
+            - name: BEDROCK_REGION
+              value: eu-west-3
+            # Analytical Platform bucket
+            - name: S3_BUCKET
+              value: mojap-rd
+            - name: S3_KEY_PREFIX
+              value: gdd_capability/gdd_capability_pay
+            - name: S3_REGION
+              value: eu-west-1
+            - name: AWS_URL_S3
+              value: https://s3.eu-west-1.amazonaws.com
