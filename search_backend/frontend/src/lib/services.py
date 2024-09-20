@@ -2,7 +2,7 @@ import logging
 import os
 import sys
 
-from .apiclient import ApiClient
+from search_backend.frontend.src.lib.apiclient import ApiClient
 
 # logger
 handler = logging.StreamHandler(sys.stdout)

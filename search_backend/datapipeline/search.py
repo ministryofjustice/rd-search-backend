@@ -3,11 +3,10 @@ Example entry point for the hybrid retrieval pipeline (without the generative AI
 
 This assumes that a document store has already been set up - see process.py
 """
-from api.src.lib import get_config
-from api.src.lib.services import SERVICES
-from utils.opensearch_pipeline_functions import setup_hybrid_pipeline
-from utils.search_functions import formatted_search_results
-
+from search_backend.api.src.lib import get_config
+from search_backend.api.src.lib.services import SERVICES
+from search_backend.datapipeline.utils.pipeline_functions import setup_hybrid_pipeline
+from search_backend.datapipeline.utils.search_functions import formatted_search_results
 
 # Setup the hybrid search pipeline - this can be done on app startup
 hybrid_pipeline = setup_hybrid_pipeline(SERVICES["querydocumentstore"], get_config())

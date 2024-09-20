@@ -7,9 +7,9 @@ This assumes that a document store has already been set up - see process.py
 import sys
 sys.path.append("..")
 
-from datapipeline.utils.opensearch_pipeline_functions import setup_rag_pipeline
-from datapipeline.utils.search_functions import query_answer
-from datapipeline.opensearch_config import opensearch_config
+from search_backend.datapipeline.utils.pipeline_functions import setup_rag_pipeline
+from search_backend.datapipeline.utils.search_functions import query_answer
+from search_backend.api.src.lib import opensearch_config
 
 
 # Setup the RAG pipeline - this can be done on app startup

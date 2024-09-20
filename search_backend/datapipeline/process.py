@@ -5,10 +5,10 @@ Example entry point for the data processing
 import sys
 sys.path.append("..")
 
-from api.src.lib import get_config
-from api.src.lib.services import SERVICES
-from datapipeline.utils.read_data_functions import read_docs
-from datapipeline.utils.opensearch_pipeline_functions import run_semantic_indexing_pipeline
+from search_backend.api.src.lib import get_config
+from search_backend.api.src.lib.services import SERVICES
+from search_backend.datapipeline.utils.read_data_functions import read_docs
+from search_backend.datapipeline.utils.pipeline_functions import run_semantic_indexing_pipeline
 
 s3client = SERVICES["s3client"]
 

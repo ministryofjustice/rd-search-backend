@@ -2,7 +2,7 @@ from datetime import datetime
 
 from flask import current_app, render_template, request
 
-from ..interaction import update_interaction, persist_and_clear_interaction
+from search_backend.frontend.src.lib.interaction import update_interaction, persist_and_clear_interaction
 
 
 def feedback_get():

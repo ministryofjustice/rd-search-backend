@@ -28,7 +28,7 @@ from datetime import datetime
 
 from flask import current_app, session
 
-from .services import SERVICES
+from search_backend.frontend.src.lib.services import SERVICES
 
 
 def start_interaction():

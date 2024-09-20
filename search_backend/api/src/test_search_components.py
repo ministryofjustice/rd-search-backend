@@ -7,10 +7,11 @@ Example of usage:
 """
 
 import argparse
-from lib import get_config
-from lib.services import SERVICES
-from lib.opensearchpipeline import setup_semantic_pipeline, setup_bm25_pipeline, setup_hybrid_pipeline
-from lib.searchfunctions import bm25_search, semantic_search, hybrid_search, pretty_print_results
+
+from search_backend.api.src.lib import get_config
+from search_backend.api.src.lib.services import SERVICES
+from search_backend.api.src.lib.opensearchpipeline import setup_semantic_pipeline, setup_bm25_pipeline, setup_hybrid_pipeline
+from search_backend.api.src.lib.searchfunctions import bm25_search, semantic_search, hybrid_search, pretty_print_results
 
 cfg = get_config()
 
