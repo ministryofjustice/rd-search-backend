@@ -11,6 +11,10 @@ source venv/bin/activate
 pip install -e ".[dev,frontend,api]"
 ```
 
+To build the package manifest with hatchling, run `hatchling build` from
+terminal at the project root. By default this writes to ./dist/, but can be
+directed with the `-d` flag.
+
 ### Adding new dependencies
 
 If you need to add a new dependency, insert it into setup.py, using the `dev`, `frontend`, or `api` section of 
