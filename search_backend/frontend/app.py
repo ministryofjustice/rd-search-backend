@@ -1,11 +1,12 @@
 import os
+from pathlib import Path
 
 from flask import Flask, jsonify, request
 
 from search_backend.frontend.lib.routes import main
 from search_backend.frontend.lib.services import SERVICES
 
-app = Flask("frontend", static_folder="./static")
+app = Flask("frontend", static_folder=Path(__file__).parent / "static")
 
 # start sessions
 app.secret_key = os.environ["FRONTEND_SESSION_KEY"]
