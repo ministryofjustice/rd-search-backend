@@ -26,6 +26,14 @@ classifiers = [
     "Operating System :: MacOS",
 ]
 dependencies = [
+    "flask>=3.0.3, <4",
+    "boto3",
+    "opensearch-py",
+    "opensearch-haystack",
+    "haystack-ai",
+    "fastembed-haystack",
+    "amazon-bedrock-haystack",
+    "accelerate"
 ]
 
 [project.optional-dependencies]
@@ -40,16 +48,6 @@ dev = [
 frontend = [
     "flask>=3.0.3, <4",
     "requests>=2.32.3, <3",
-]
-api = [
-    "flask>=3.0.3, <4",
-    "boto3",
-    "opensearch-py",
-    "opensearch-haystack",
-    "haystack-ai",
-    "fastembed-haystack",
-    "amazon-bedrock-haystack",
-    "accelerate"
 ]
 datapipeline = [
    "accelerate==0.33.0",
