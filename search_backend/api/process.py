@@ -2,10 +2,10 @@
 Example entry point for the data processing
 """
 
-from search_backend.api.src.lib import get_config
-from search_backend.api.src.lib.services import SERVICES
-from search_backend.api.src.lib.read_data_functions import read_docs
-from search_backend.api.src.lib.opensearchpipeline import run_semantic_indexing_pipeline
+from search_backend.api.lib import get_config
+from search_backend.api.lib.services import SERVICES
+from search_backend.api.lib.read_data_functions import read_docs
+from search_backend.api.lib.opensearchpipeline import run_semantic_indexing_pipeline
 
 cfg = get_config()
 

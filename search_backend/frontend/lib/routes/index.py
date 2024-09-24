@@ -1,7 +1,7 @@
 from flask import render_template, request
 
-from search_backend.frontend.src.lib.services import SERVICES
-from search_backend.frontend.src.lib.interaction import start_interaction, update_interaction
+from search_backend.frontend.lib.services import SERVICES
+from search_backend.frontend.lib.interaction import start_interaction
 
 
 def index_get():

@@ -3,7 +3,7 @@ import logging, sys
 from flask import Flask, jsonify, request
 from opensearchpy.exceptions import OpenSearchException
 
-from search_backend.api.src.lib.services import SERVICES
+from search_backend.api.lib.services import SERVICES
 
 app = Flask("backend")
 

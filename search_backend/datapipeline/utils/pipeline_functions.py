@@ -4,7 +4,6 @@ Haystack pipeline functions for indexing and retrieval.
 
 import os
 
-from haystack.utils import Secret
 from haystack import Document
 from haystack import Pipeline
 from haystack.components.builders import PromptBuilder
@@ -26,7 +25,7 @@ from haystack_integrations.components.retrievers.qdrant import (
 )
 from haystack_integrations.document_stores.qdrant import QdrantDocumentStore
 
-from search_backend.api.src.lib import get_config
+from search_backend.api.lib import get_config
 
 cfg = get_config()
 

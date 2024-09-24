@@ -1,7 +1,7 @@
 from flask import Blueprint
 
-from search_backend.frontend.src.lib.routes.index import index_get, index_post
-from search_backend.frontend.src.lib.routes.feedback import feedback_get, feedback_post
+from search_backend.frontend.lib.routes.index import index_get, index_post
+from search_backend.frontend.lib.routes.feedback import feedback_get, feedback_post
 
 main = Blueprint("mainroutes", __name__, template_folder="templates")
 

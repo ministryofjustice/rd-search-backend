@@ -3,8 +3,8 @@ Example entry point for the hybrid retrieval pipeline (without the generative AI
 
 This assumes that a document store has already been set up - see process.py
 """
-from search_backend.api.src.lib import get_config
-from search_backend.api.src.lib.services import SERVICES
+from search_backend.api.lib import get_config
+from search_backend.api.lib import SERVICES
 from search_backend.datapipeline.utils.pipeline_functions import setup_hybrid_pipeline
 from search_backend.datapipeline.utils.search_functions import formatted_search_results
 

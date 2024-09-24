@@ -9,7 +9,7 @@ sys.path.append("..")
 
 from search_backend.datapipeline.utils.pipeline_functions import setup_rag_pipeline
 from search_backend.datapipeline.utils.search_functions import query_answer
-from search_backend.api.src.lib import opensearch_config
+from search_backend.api.lib import opensearch_config
 
 
 # Setup the RAG pipeline - this can be done on app startup

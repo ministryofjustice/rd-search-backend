@@ -5,8 +5,8 @@ Example entry point for the data processing
 import sys
 sys.path.append("..")
 
-from search_backend.api.src.lib import get_config
-from search_backend.api.src.lib.services import SERVICES
+from search_backend.api.lib import get_config
+from search_backend.api.lib import SERVICES
 from search_backend.datapipeline.utils.read_data_functions import read_docs
 from search_backend.datapipeline.utils.pipeline_functions import run_semantic_indexing_pipeline
 
