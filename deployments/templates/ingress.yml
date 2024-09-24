@@ -1,9 +1,9 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: example-ingress
+  name: appingress
   annotations:
-    external-dns.alpha.kubernetes.io/set-identifier: example-ingress-${NAMESPACE}-green
+    external-dns.alpha.kubernetes.io/set-identifier: appingress-${NAMESPACE}-green
     external-dns.alpha.kubernetes.io/aws-weight: "100"
 
     # IP WHITELIST
