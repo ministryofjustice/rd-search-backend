@@ -18,8 +18,8 @@ requires-python = ">=3.9, <4"
 description = "Modular component for AI-enabled application search backend."
 readme = "README.md"
 authors = [
-    { name="Elliot Smith", email="elliot.smith@justice.digital.gov.uk" },
-    { name="Chloe Pugh", email="chloe.pugh@justice.digital.gov.uk" },
+    { name="Elliot Smith", email="elliot.smith@digital.justice.gov.uk" },
+    { name="Chloe Pugh", email="chloe.pugh@digital.justice.gov.uk" },
 ]
 classifiers = [
     "Programming Language :: Python :: 3",
