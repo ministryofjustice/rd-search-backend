@@ -47,15 +47,13 @@ docker compose build ; docker compose up
 3. Upload to local S3 bucket:
 
 ```
-cd scripts
-python upload_zip_to_s3.py --local ~/Downloads/gdd_capability_pay.zip build/unzip
+python scripts/upload_zip_to_s3.py --local ~/Downloads/gdd_capability_pay.zip build/unzip
 ```
 
 4. Run process.py to download docs from local S3 and write index into opensearch:
 
 ```
-cd ../api/src
-AWS_URL_S3=http://0.0.0.0:4566 OPENSEARCH_URL=http://0.0.0.0:4566/opensearch/eu-west-2/rd-hr python process.py
+AWS_URL_S3=http://0.0.0.0:4566 OPENSEARCH_URL=http://0.0.0.0:4566/opensearch/eu-west-2/rd-hr python search_backend/api/process.py
 ```
 
 5. Run a test query against the index:

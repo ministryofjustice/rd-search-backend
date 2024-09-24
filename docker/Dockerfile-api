@@ -14,12 +14,12 @@ RUN pip install --upgrade pip && \
 RUN addgroup --system flaskgroup && \
     adduser --system --ingroup flaskgroup --uid 977 --no-create-home flaskuser
 
-RUN chown -R flaskuser:flaskgroup /app
-
 ENV HAYSTACK_TELEMETRY_ENABLED="False"
 ENV HUGGINGFACE_HUB_CACHE="/app/.cache/huggingface/hub"
 RUN mkdir -p /app/embedding_cache
 RUN mkdir -p /app/.cache/huggingface/hub
+
+RUN chown -R flaskuser:flaskgroup /app
 
 USER 977
 

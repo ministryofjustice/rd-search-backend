@@ -31,7 +31,7 @@ with zipfile.ZipFile(args.zipfile, "r") as zip_file:
     zip_file.extractall(destdir_path)
 
 # get list of files
-files_to_upload = glob(f"{destdir_path / '**/*'}")
+files_to_upload = glob(f"{destdir_path / '**'}")
 
 # upload files to s3 bucket; NB in localstack, we can just use
 # "localstack" for auth
