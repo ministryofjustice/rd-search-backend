@@ -1,15 +1,16 @@
 from typing import Optional
 
-from .searchfunctions import query_answer
+from search_backend.api.src.lib.searchfunctions import formatted_search_results
 
 
-class BedrockQueryService:
+class HybridQueryService:
 
     def __init__(self, pipeline):
         self.pipe = pipeline
 
     def ask(self, question: str) -> tuple[Optional[dict], Optional[str]]:
         """
+
         :param question: user's question
         :return: <best answer or None>, <error or None>
 
@@ -22,9 +23,9 @@ class BedrockQueryService:
           ]
         }
         """
-        results = query_answer(question, self.pipe)
+        results = formatted_search_results(question, self.pipe, top_k=5)
 
-        print(("+" * 100) + " RESULTS FROM BEDROCK")
+        print("+" * 100)
         print(results)
 
         if len(results) == 0:

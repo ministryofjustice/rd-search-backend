@@ -11,7 +11,7 @@ from pdfminer.pdfinterp import PDFResourceManager, PDFPageInterpreter
 from pdfminer.pdfpage import PDFPage
 from pptx import Presentation
 
-from .s3client import S3Client
+from search_backend.api.src.lib import S3Client
 
 
 def read_pdf_gen(f, title, fname):
@@ -147,8 +147,7 @@ def read_ppt_gen(f, title, fname):
     for ii, slide in enumerate(ppt.slides):
 
         # Skip the first slide, since it's just a title slide
-        if ii == 0:
-            continue
+        if ii == 0: continue
 
         slide_text = []
 
@@ -198,7 +197,7 @@ def read_ppt_gen(f, title, fname):
             yield slide_dict
     
 
-def read_docs(s3client: S3Client, fnames: list[str]):
+def read_docs(s3client: S3Client, fnames: list[str], docker: bool=True, bucket_name: str=None):
     """
     Iterates through a list of docs and calls the appropriate function
     to extract the text from each page (if applicable) of each doc.
@@ -206,12 +205,12 @@ def read_docs(s3client: S3Client, fnames: list[str]):
     Arguments:
      - s3client: S3 client set up with authentication
      - fnames: a list of keys in the bucket
+     - docker: bool for whether or not the function is being run from a Docker container
+     - bucket_name: optional s3 bucket to specify if docker=False
 
     Returns:
     A list of dictionaries containing document text and metadata.
     """
-
-    print("Reading documents...")
 
     data = []
 
@@ -220,7 +219,10 @@ def read_docs(s3client: S3Client, fnames: list[str]):
         title = fname.split('/')[-1]
 
         # Read in the pdf
-        obj, _ = s3client.get_object(fname, prepend_prefix=False)
+        if docker:
+            obj, _ = s3client.get_object(fname, prepend_prefix=False)
+        else:
+            obj = s3client.get_object(Bucket=bucket_name, Key=fname)
 
         fs = obj["Body"].read()
 

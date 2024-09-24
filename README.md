@@ -8,15 +8,19 @@ dependencies:
 ```
 python3 -m venv venv
 source venv/bin/activate
-pip install -e ".[dev,frontend,api]"
+pip install -e ".[dev,frontend]"
 ```
+
+To build the package manifest with hatchling, run `hatchling build` from
+terminal at the project root. By default this writes to ./dist/, but can be
+directed with the `-d` flag.
 
 ### Adding new dependencies
 
-If you need to add a new dependency, insert it into setup.py, using the `dev`, `frontend`, or `api` section of 
-the `extras_require` block, depending on where the dependency is required.
+If you need to add a new dependency, insert it into setup.py, using the `dependencies` `dev`, or `frontend` sections of 
+the pyproject.toml, depending on where the dependency is required.
 
-Set upper and lower bounds for the versions if adding a dependency to frontend or api.
+Set upper and lower bounds for the versions if adding a dependency to frontend or required dependencies.
 
 The requirements.txt files for the frontend and api are generated at the point when the docker images are built, using
 `pip-compile` running against the setup.py file.

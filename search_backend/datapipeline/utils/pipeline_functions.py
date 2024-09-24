@@ -26,7 +26,7 @@ from haystack_integrations.components.retrievers.qdrant import (
 )
 from haystack_integrations.document_stores.qdrant import QdrantDocumentStore
 
-from api.src.lib import get_config
+from search_backend.api.src.lib import get_config
 
 cfg = get_config()
 
