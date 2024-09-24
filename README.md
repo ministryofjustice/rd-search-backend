@@ -56,8 +56,5 @@ python scripts/upload_zip_to_s3.py --local ~/Downloads/gdd_capability_pay.zip bu
 AWS_URL_S3=http://0.0.0.0:4566 OPENSEARCH_URL=http://0.0.0.0:4566/opensearch/eu-west-2/rd-hr python search_backend/api/process.py
 ```
 
-5. Run a test query against the index:
-
-```
-OPENSEARCH_URL=http://0.0.0.0:4566/opensearch/eu-west-2/rd-hr python search.py
-```
+You should now be able to access the application at http://localhost:8080/ and ask a question. Currently, the local
+setup has no generative AI, so you will just be performing a search.
