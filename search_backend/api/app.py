@@ -1,4 +1,5 @@
-import logging, sys
+import logging
+import sys
 
 from flask import Flask, jsonify, request
 from opensearchpy.exceptions import OpenSearchException

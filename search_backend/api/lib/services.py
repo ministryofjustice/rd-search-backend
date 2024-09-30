@@ -4,13 +4,14 @@ from urllib.parse import urlparse
 from haystack_integrations.document_stores.opensearch import OpenSearchDocumentStore
 from opensearchpy import OpenSearch, Urllib3HttpConnection, Urllib3AWSV4SignerAuth
 
-from search_backend.api.lib import get_config
+from search_backend.api.lib.config import get_config
 from search_backend.api.lib.aws import get_aws_session
 from search_backend.api.lib.bedrockqueryservice import BedrockQueryService
 from search_backend.api.lib.dummyqueryservice import DummyQueryService
 from search_backend.api.lib.hybridqueryservice import HybridQueryService
 from search_backend.api.lib.opensearchpipeline import setup_hybrid_pipeline, setup_rag_pipeline
 from search_backend.api.lib.s3client import S3Client
+
 
 # S3 needs a specific region if we're using Analytical Platform buckets
 def s3client_factory():
