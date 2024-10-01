@@ -2,7 +2,7 @@ services:
 
   frontend:
     build:
-      dockerfile: frontend/Dockerfile
+      dockerfile: docker/Dockerfile-frontend
       context: .
     restart: always
     ports:
@@ -16,7 +16,7 @@ services:
 
   api:
     build:
-      dockerfile: api/Dockerfile
+      dockerfile: docker/Dockerfile-api
       context: .
     restart: always
     ports:

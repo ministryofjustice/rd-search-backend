@@ -1,0 +1,26 @@
+FROM python:3.10-bookworm
+
+WORKDIR /app
+
+HEALTHCHECK --interval=5s --timeout=3s CMD curl -f http://0.0.0.0:8081/health-check || exit 1
+
+COPY pyproject.toml .
+COPY README.md .
+COPY search_backend/ ./search_backend/
+
+RUN pip install --upgrade pip && \
+    pip install .
+
+RUN addgroup --system flaskgroup && \
+    adduser --system --ingroup flaskgroup --uid 977 --no-create-home flaskuser
+
+ENV HAYSTACK_TELEMETRY_ENABLED="False"
+ENV HUGGINGFACE_HUB_CACHE="/app/.cache/huggingface/hub"
+RUN mkdir -p /app/embedding_cache
+RUN mkdir -p /app/.cache/huggingface/hub
+
+RUN chown -R flaskuser:flaskgroup /app
+
+USER 977
+
+CMD flask --app ./search_backend/api/app.py run --host 0.0.0.0 --port 8081 --debug
