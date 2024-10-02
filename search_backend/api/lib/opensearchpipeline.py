@@ -62,6 +62,40 @@ def run_semantic_indexing_pipeline(dataset, document_store: OpenSearchDocumentSt
     indexing.run({"document_splitter": {"documents": docs}})
 
 
+def run_bm25_indexing_pipeline(dataset, document_store: OpenSearchDocumentStore, cfg):
+    """
+    This function embeds the data according to the chosen model, and writes to a document store.
+
+    :param dataset - this is list of dictionaries containing the parsed data.
+    :param cfg - the configuration of the pipeline, as per get_config()
+
+    Other inputs, such as models to be used come from the config file.
+    """
+
+    print("Initialising document store")
+
+    # Convert the list of dictionaries into a list of Haystack Document objects
+    docs = [
+        Document(**content, id_hash_keys=["content", "meta"]) for content in dataset
+    ]
+
+    document_splitter = DocumentSplitter(
+        split_by="word", split_length=128, split_overlap=32
+    )
+
+    indexing = Pipeline()
+    indexing.add_component("document_splitter", document_splitter)
+    indexing.add_component(
+        "document_writer",
+        DocumentWriter(document_store=document_store, policy=DuplicatePolicy.OVERWRITE),
+    )
+    indexing.connect("document_splitter", "document_writer")
+
+    # Create the document store
+    print("Running indexing pipeline...")
+    indexing.run({"document_splitter": {"documents": docs}})
+
+
 def setup_hybrid_pipeline(document_store: OpenSearchDocumentStore, dense_embedding_model: str, rerank_model: str) -> Pipeline:
     """
     This function sets up the hybrid retrieval pipeline based on an existing document store.

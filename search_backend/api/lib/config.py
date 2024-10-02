@@ -24,7 +24,7 @@ defaults = {
     "OPENSEARCH_URL": "http://localstack:4566",
     "QUERY_SERVICE": "hybrid",
 
-    "dense_embedding_model": "snowflake/snowflake-arctic-embed-s",
+    "dense_embedding_model": "snowflake/snowflake-arctic-embed-xs",
     "rerank_model": "cross-encoder/ms-marco-MiniLM-L-6-v2",
     "llm": "anthropic.claude-3-sonnet-20240229-v1:0",
 }

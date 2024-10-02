@@ -132,7 +132,7 @@ def pretty_print_results(prediction):
     for doc in prediction:
         print('-----------------------------------')
         # print(doc.meta["title"], doc.meta["page"], doc.meta["para"])
-        print(f'{doc.meta["title"]} - Page {doc.meta["page"]} - Score: {doc.score}')
+        print(f'{doc.meta["project_name"]} - Score: {doc.score}')
         print(doc.content)
         # print(doc.document["content"])
         print("\n")
