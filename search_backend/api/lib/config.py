@@ -14,7 +14,6 @@ defaults = {
     # this only needs to be set if the S3 bucket we're using is not in eu-west-2 (Cloud Platform);
     # Analytical Platform S3 is in eu-west-1
     "S3_REGION": "eu-west-1",
-    "BEDROCK_REGION": "eu-west-3",
 
     "AWS_URL": "http://localstack:4566",
     "AWS_URL_S3": "http://localstack:4566",
@@ -26,7 +25,6 @@ defaults = {
 
     "dense_embedding_model": "snowflake/snowflake-arctic-embed-xs",
     "rerank_model": "cross-encoder/ms-marco-MiniLM-L-6-v2",
-    "llm": "anthropic.claude-3-sonnet-20240229-v1:0",
 }
 
 

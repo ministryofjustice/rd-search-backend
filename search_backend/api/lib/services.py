@@ -6,7 +6,6 @@ from opensearchpy import OpenSearch, Urllib3HttpConnection, Urllib3AWSV4SignerAu
 
 from search_backend.api.lib.config import get_config
 from search_backend.api.lib.aws import get_aws_session
-from search_backend.api.lib.bedrockqueryservice import BedrockQueryService
 from search_backend.api.lib.dummyqueryservice import DummyQueryService
 from search_backend.api.lib.hybridqueryservice import HybridQueryService
 from search_backend.api.lib.opensearchpipeline import RetrievalPipeline, setup_rag_pipeline
@@ -69,16 +68,6 @@ def query_service_factory():
     if cfg["QUERY_SERVICE"] == "hybrid":
         pipeline = RetrievalPipeline(document_store, cfg["dense_embedding_model"], cfg["rerank_model"])
         return HybridQueryService(pipeline.setup_hybrid_pipeline())
-    elif cfg["QUERY_SERVICE"] == "bedrock":
-        pipeline = RetrievalPipeline(document_store, cfg["dense_embedding_model"], cfg["rerank_model"])
-        return BedrockQueryService(
-            setup_rag_pipeline(
-                HybridQueryService(pipeline.setup_hybrid_pipeline()),
-                cfg["llm"],
-                cfg["BEDROCK_REGION"],
-                get_aws_session(cfg, cfg["BEDROCK_REGION"]).get_credentials()
-            )
-        )
     else:
         return DummyQueryService(
             Path(__file__).parent / "../fixtures/dummyanswers.json"

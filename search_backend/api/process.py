@@ -5,7 +5,7 @@ Example entry point for the data processing
 from search_backend.api.lib import get_config
 from search_backend.api.lib.services import SERVICES
 from search_backend.api.lib.read_data_functions import read_docs
-from search_backend.api.lib.opensearchpipeline import run_semantic_indexing_pipeline
+from search_backend.api.lib.opensearchpipeline import run_indexing_pipeline
 
 cfg = get_config()
 
@@ -20,4 +20,4 @@ file_list = [obj["Key"] for obj in objs]
 dataset = read_docs(s3client, file_list)
 
 # Create the document store containing the embeddings
-run_semantic_indexing_pipeline(dataset, document_store, cfg)
+run_indexing_pipeline(dataset, document_store, cfg, semantic=True)

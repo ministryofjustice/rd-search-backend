@@ -4,21 +4,17 @@ Haystack pipeline functions for indexing and retrieval, using Opensearch as the 
 
 import os
 
-from haystack.utils import Secret
 from haystack import Document
 from haystack.components.writers import DocumentWriter
 from haystack.document_stores.types import DuplicatePolicy
 from haystack.components.preprocessors.document_splitter import DocumentSplitter
 from haystack import Pipeline
-from haystack.components.builders import PromptBuilder
-from haystack.components.builders.answer_builder import AnswerBuilder
 from haystack.components.joiners import DocumentJoiner
 from haystack.components.rankers import TransformersSimilarityRanker
 from haystack_integrations.components.embedders.fastembed import (
     FastembedDocumentEmbedder,
     FastembedTextEmbedder,
 )
-from haystack_integrations.components.generators.amazon_bedrock import AmazonBedrockGenerator
 from haystack_integrations.components.retrievers.opensearch import OpenSearchBM25Retriever, OpenSearchEmbeddingRetriever
 from haystack_integrations.document_stores.opensearch import OpenSearchDocumentStore
 
@@ -102,7 +98,7 @@ class RetrievalPipeline():
             )
         else:
             self.dense_text_embedder = None
-        
+
         if rerank_model is not None:
             self.rerank_model = rerank_model
         else:
@@ -165,53 +161,3 @@ class RetrievalPipeline():
         bm25_retrieval.add_component("bm25_retriever", self.bm25_retriever)
 
         return bm25_retrieval
-
-
-def setup_rag_pipeline(base_pipeline: Pipeline, llm: str, region: str, credentials) -> Pipeline:
-    """
-    This function sets up the RAG pipeline by providing a prompt to a genAI model, and calling the function
-    setup the hybrid retrieval pipeline.
-
-    :return: Returns the pipeline object to be used for a Question-Answer system.
-    """
-
-    template = """
-    You are a helpful assistant tasked with answering HR policy queries.
-
-    Here is information to use to answer a question:
-    {% for document in documents %}
-        {{ document.content }}
-    {% endfor %}
-
-    Answer the following question using the information above.
-    Your answer must be in British English and use language that is clear and concise.
-    Answer the question directly. DO NOT begin your answer with 'According to the information provided'.
-
-    If the information does not provide the answer to the question, reply with: 'Apologies, that query cannot be answered using the supplied documents.'
-
-    Question: {{question}}
-    Answer:
-    """
-
-    generator = AmazonBedrockGenerator(
-        # model="anthropic.claude-3-haiku-20240307-v1:0",
-        model=llm,
-        aws_access_key_id=Secret.from_token(credentials.access_key),
-        aws_secret_access_key=Secret.from_token(credentials.secret_key),
-        aws_session_token=Secret.from_token(credentials.token),
-        aws_region_name=Secret.from_token(region),
-        max_length=1000,
-        temperature=0
-    )
-
-    base_pipeline.add_component("prompt_builder", PromptBuilder(template=template))
-    base_pipeline.add_component("generator", generator)
-    base_pipeline.add_component("answer_builder", AnswerBuilder())
-
-    base_pipeline.connect("ranker", "prompt_builder.documents")
-
-    base_pipeline.connect("prompt_builder", "generator")
-    base_pipeline.connect("generator.replies", "answer_builder.replies")
-    base_pipeline.connect("ranker", "answer_builder.documents")
-
-    return base_pipeline

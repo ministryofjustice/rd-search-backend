@@ -138,70 +138,9 @@ def pretty_print_results(prediction):
         print("\n")
 
 
-def rag_response(search_query: str, pipe, filters=None, top_k: int = 3, score_threshold: float = 0.5):
-    """
-    Run the RAG pipeline and return the answer to a query.
-    
-    :param 1: search_query - The search query in the form of a text string.
-    :param 2: pipeline - The pipeline object. This is the output from run_pipeline().
-    :param 3: filters - Any filters used to restrict the documents retrieved
-    :param 4: top_k - max number of results retrieved
-    :param 5: score_threshold - a threshold match score to prevent irrelevant docs being provided
-
-    :return: Returns the AI-generated answer to a query.
-    """
-
-    answer = pipe.run({
-        "dense_text_embedder": {"text": search_query},
-        "bm25_retriever": {"query": search_query, "filters": filters, "top_k": top_k},
-        "embedding_retriever": {"filters": filters, "top_k": top_k},
-        "ranker": {"query": search_query, "top_k": top_k, "score_threshold": score_threshold},
-        "prompt_builder": {"question": search_query},
-        "answer_builder": {"query": search_query},
-    })
-
-    return answer['answer_builder']['answers'][0]
-
-
-def query_answer(search_query: str, pipe, filters=None, top_k: int = 3, score_threshold: float = 0.5):
-    """
-    Run the RAG question-answer pipeline and format the response
-    """
-
-    # Run text cleaning (to remove excess spaces and less common punctuation marks)
-    cleaned_query = clean_query(search_query)
-
-    # Generate an answer - this part needs to be run when a user enters a query
-    if detect_bad_query(cleaned_query):
-        answer = {
-            "answer": "Invalid query. Please try again.",
-            "sources": []
-        }
-    else:
-        # This only runs if the query has passed a validation check
-        response = rag_response(search_query, pipe, filters=filters, top_k=top_k, score_threshold=score_threshold)
-
-        sources = []
-        for source in response.documents:
-            source_info = {
-                "title": source.meta['title'],
-                # "url": source.meta['url'], # to be added later
-                # "date_updated": ...
-                "text_excerpt": f'"{source.content[:200]}..."',
-            }
-            sources.append(source_info)
-
-        answer = {
-            "answer": response.data,
-            "sources": sources,
-        }
-
-    return answer
-
-
 def formatted_search_results(search_query: str, pipe, filters=None, top_k: int = 5):
     """
-    Format hybrid search results similarly to the output from query_answer()
+    Format hybrid search results
     """
 
     # Run text cleaning (to remove excess spaces and less common punctuation marks)

@@ -10,7 +10,7 @@ import argparse
 
 from search_backend.api.lib import get_config
 from search_backend.api.lib.services import SERVICES
-from search_backend.api.lib.opensearchpipeline import setup_semantic_pipeline, setup_bm25_pipeline, setup_hybrid_pipeline
+from search_backend.api.lib.opensearchpipeline import RetrievalPipeline
 from search_backend.api.lib.searchfunctions import bm25_search, semantic_search, hybrid_search, pretty_print_results
 
 cfg = get_config()
@@ -27,11 +27,13 @@ print(test_query)
 # Connect to an existing Opensearch document store
 query_document_store = SERVICES["querydocumentstore"]
 
+pipeline = RetrievalPipeline(query_document_store, cfg["dense_embedding_model"], cfg["rerank_model"])
+
 # Check BM25 pipeline
 print("**************************")
 print("BM25 search results")
 print("**************************")
-bm25_pipeline = setup_bm25_pipeline(query_document_store)
+bm25_pipeline = pipeline.setup_bm25_pipeline()
 results = bm25_search(test_query, bm25_pipeline, top_k=3)
 pretty_print_results(results["bm25_retriever"]['documents'])
 
@@ -39,7 +41,7 @@ print("\n")
 print("**************************")
 print("Semantic search results")
 print("**************************")
-semantic_pipeline = setup_semantic_pipeline(query_document_store, cfg["dense_embedding_model"], cfg["rerank_model"])
+semantic_pipeline = pipeline.setup_semantic_pipeline()
 results = semantic_search(test_query, semantic_pipeline, top_k=3)
 pretty_print_results(results["ranker"]['documents'])
 print("\n")
@@ -48,7 +50,7 @@ print("\n")
 print("**************************")
 print("Hybrid search results")
 print("**************************")
-hybrid_pipeline = setup_hybrid_pipeline(query_document_store, cfg["dense_embedding_model"], cfg["rerank_model"])
+hybrid_pipeline = pipeline.setup_hybrid_pipeline()
 results = hybrid_search(test_query, hybrid_pipeline, top_k=3)
 pretty_print_results(results["ranker"]['documents'])
 print("\n")
