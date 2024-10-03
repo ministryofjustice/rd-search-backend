@@ -9,7 +9,7 @@ from search_backend.api.lib.aws import get_aws_session
 from search_backend.api.lib.bedrockqueryservice import BedrockQueryService
 from search_backend.api.lib.dummyqueryservice import DummyQueryService
 from search_backend.api.lib.hybridqueryservice import HybridQueryService
-from search_backend.api.lib.opensearchpipeline import setup_hybrid_pipeline, setup_rag_pipeline
+from search_backend.api.lib.opensearchpipeline import RetrievalPipeline, setup_rag_pipeline
 from search_backend.api.lib.s3client import S3Client
 
 
@@ -67,17 +67,13 @@ def query_service_factory():
     document_store = document_store_factory(cfg, create_index=False)
 
     if cfg["QUERY_SERVICE"] == "hybrid":
-        return HybridQueryService(
-            setup_hybrid_pipeline(document_store, cfg["dense_embedding_model"], cfg["rerank_model"])
-        )
+        pipeline = RetrievalPipeline(document_store, cfg["dense_embedding_model"], cfg["rerank_model"])
+        return HybridQueryService(pipeline.setup_hybrid_pipeline())
     elif cfg["QUERY_SERVICE"] == "bedrock":
+        pipeline = RetrievalPipeline(document_store, cfg["dense_embedding_model"], cfg["rerank_model"])
         return BedrockQueryService(
             setup_rag_pipeline(
-                setup_hybrid_pipeline(
-                    document_store,
-                    cfg["dense_embedding_model"],
-                    cfg["rerank_model"]
-                ),
+                HybridQueryService(pipeline.setup_hybrid_pipeline()),
                 cfg["llm"],
                 cfg["BEDROCK_REGION"],
                 get_aws_session(cfg, cfg["BEDROCK_REGION"]).get_credentials()
