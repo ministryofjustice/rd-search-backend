@@ -69,3 +69,12 @@ docker compose build ; docker compose up
 ...to be continued.
 
 
+
+4. Run process.py to process data and write index into opensearch:
+
+```
+AWS_URL_S3=http://0.0.0.0:4566 OPENSEARCH_URL=http://0.0.0.0:4566/opensearch/eu-west-2/rd-hr python search_backend/api/process.py
+```
+
+You should now be able to access the application at http://localhost:8080/ and perform a search.
+
