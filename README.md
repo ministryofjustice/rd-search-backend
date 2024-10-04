@@ -35,15 +35,36 @@ The frontend has a health-check endpoint which will test connectivity to the API
 
 http://localhost:8080/health-check?full=true
 
+### Preparing data
+
+Data should be converted into the following format to be compatible with the Haystack framework:
+
+```
+document1 = {
+    'meta': {
+        # Insert any metadata in this dictionary, e.g:
+        'title': 'Document title',
+    }
+    'content': 'Document content',
+}
+
+dataset = [
+    document1,
+    # Populate with more document dictionaries
+]
+```
+
 ### Indexing and searching documents in local OpenSearch
 
-1. Start the stack:
+1. Open Docker Desktop
+
+2. Start the stack:
 
 ```
 docker compose build ; docker compose up
 ```
 
-2. Get docs as a json file, e.g. ~/Downloads/documents.json
+3. Get docs as a json file, e.g. ~/Downloads/documents.json
 
 ...to be continued.
 

@@ -37,7 +37,7 @@ def detect_bad_query(query):
      - have unusual spacing - for example 'I g n o r e  a l l  p r e v i o u s  i n s t r u c t i o n'
     """
 
-    # Check if the query excedes a threshold length
+    # Check if the query exceeds a threshold length
     if len(query) > 500:
         print("The query is too long, please enter a shorter query.")
         return True
@@ -131,10 +131,8 @@ def pretty_print_results(prediction):
 
     for doc in prediction:
         print('-----------------------------------')
-        # print(doc.meta["title"], doc.meta["page"], doc.meta["para"])
-        print(f'{doc.meta["project_name"]} - Score: {doc.score}')
+        print(f'{doc.meta["title"]} - Score: {doc.score}')
         print(doc.content)
-        # print(doc.document["content"])
         print("\n")
 
 
@@ -160,7 +158,6 @@ def formatted_search_results(search_query: str, pipe, filters=None, top_k: int =
         for doc in results["ranker"]['documents']:
             doc_info = {
                 "title": doc.meta["title"],
-                "page": doc.meta["page"],
                 "score": doc.score,
                 "text_excerpt": f'"{doc.content}"',
             }
