@@ -8,6 +8,7 @@ dependencies:
 ```
 python3 -m venv venv
 source venv/bin/activate
+pip install -e '.[dev, search_backend]'
 pip install hatchling
 ```
 
@@ -42,19 +43,8 @@ http://localhost:8080/health-check?full=true
 docker compose build ; docker compose up
 ```
 
-2. Get docs as a zip file, e.g. ~/Downloads/gdd_capability_pay.zip
+2. Get docs as a json file, e.g. ~/Downloads/documents.json
 
-3. Upload to local S3 bucket:
+...to be continued.
 
-```
-python scripts/upload_zip_to_s3.py --local ~/Downloads/gdd_capability_pay.zip build/unzip
-```
 
-4. Run process.py to download docs from local S3 and write index into opensearch:
-
-```
-AWS_URL_S3=http://0.0.0.0:4566 OPENSEARCH_URL=http://0.0.0.0:4566/opensearch/eu-west-2/rd-hr python search_backend/api/process.py
-```
-
-You should now be able to access the application at http://localhost:8080/ and ask a question. Currently, the local
-setup has no generative AI, so you will just be performing a search.
