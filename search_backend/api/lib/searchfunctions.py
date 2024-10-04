@@ -3,6 +3,7 @@ Functions to run searches based on Haystack pipelines and print the results.
 """
 
 import re
+from haystack import Pipeline
 
 
 def clean_query(query):
@@ -51,80 +52,91 @@ def detect_bad_query(query):
     return False
 
 
-def hybrid_search(search_query, pipeline, filters=None, top_k=10):
+class Search:
     """
-    This allows us to enter a search query and search the data by running the pipeline and
-    returning the specified number of results from each node.
-
-    :param 1: The search query in the form of a text string.
-    :param 2: The pipeline object. This is the output from setup_hybrid_pipeline().
-
-    :return: Returns a list of ranked search outputs.
+    Run different types of search: either BM25, semantic, or hybrid (semantic + BM25)
     """
 
-    prediction = pipeline.run(
-        {
-            # "sparse_text_embedder": {"text": search_query},
-            "dense_text_embedder": {"text": search_query},
-            # "text_embedder": {"text": search_query},
-            "bm25_retriever": {"query": search_query, "filters": filters, "top_k": top_k},
-            "embedding_retriever": {"filters": filters, "top_k": top_k},
-            # "retriever": {"filters": filters, "top_k": top_k},
-            "ranker": {"query": search_query, "top_k": top_k},
-        }
-    )
+    def __init__(self, search_query: str, pipeline: Pipeline, filters: dict=None, top_k: int=10):
+        """
+        Args:
+            :search_query: The search query in the form of a text string.
+            :pipeline: The pipeline to use. This should be defined using the RetrievalPipeline() class.
+            :filters: Metadata filters. These should be formatted like:
+                ```
+                filters = {
+                    "operator": "AND",
+                    "conditions": [
+                        {"field": "meta.type", "operator": "==", "value": "article"},
+                        {"field": "meta.genre", "operator": "in", "value": ["economy", "politics"]},
+                    ],
+                }
+                ```
+            :top_k: How many results to return.
+        """
 
-    return prediction
+        self.search_query = search_query
+        self.pipeline = pipeline
+        self.filters = filters
+        self.top_k = top_k
 
+    def hybrid_search(self):
+        """
+        Run a hybrid search pipeline and return results.
 
-def semantic_search(search_query, pipeline, filters=None, top_k=10):
-    """
-    This allows us to enter a search query and search the data by running the pipeline and
-    returning the specified number of results from each node.
+        :return: A list of ranked search results.
+        """
 
-    :param 1: The search query in the form of a text string.
-    :param 2: The pipeline object. This is the output from setup_semantic_pipeline().
+        prediction = self.pipeline.run(
+            {
+                "dense_text_embedder": {"text": self.search_query},
+                "bm25_retriever": {"query": self.search_query, "filters": self.filters, "top_k": self.top_k},
+                "embedding_retriever": {"filters": self.filters, "top_k": self.top_k},
+                "ranker": {"query": self.search_query, "top_k": self.top_k},
+            }
+        )
 
-    :return: Returns a list of ranked search outputs.
-    """
+        return prediction
 
-    print("Running search...")
-    prediction = pipeline.run(
-        {
-            "dense_text_embedder": {"text": search_query},
-            "embedding_retriever": {"filters": filters, "top_k": top_k},
-            "ranker": {"query": search_query, "top_k": top_k},
-        }
-    )
+    def semantic_search(self):
+        """
+        Run a semantic search pipeline and return results.
 
-    return prediction
+        :return: A list of ranked search results.
+        """
 
+        print("Running search...")
+        prediction = self.pipeline.run(
+            {
+                "dense_text_embedder": {"text": self.search_query},
+                "embedding_retriever": {"filters": self.filters, "top_k": self.top_k},
+                "ranker": {"query": self.search_query, "top_k": self.top_k},
+            }
+        )
 
-def bm25_search(search_query, pipeline, filters=None, top_k=10):
-    """
-    This allows us to enter a search query and search the data by running the pipeline and
-    returning the specified number of results from each node.
+        return prediction
 
-    :param 1: The search query in the form of a text string.
-    :param 2: The pipeline object. This is the output from setup_bm25_pipeline().
+    def bm25_search(self):
+        """
+        Run a BM25 search pipeline and return results.
 
-    :return: Returns a list of ranked search outputs.
-    """
+        :return: A list of ranked search results.
+        """
 
-    prediction = pipeline.run(
-        {
-            "bm25_retriever": {"query": search_query, "filters": filters, "top_k": top_k},
-        }
-    )
+        prediction = self.pipeline.run(
+            {
+                "bm25_retriever": {"query": self.search_query, "filters": self.filters, "top_k": self.top_k},
+            }
+        )
 
-    return prediction
+        return prediction
 
 
 def pretty_print_results(prediction):
     """
     This reformats the ranked search results to a more human-readable format.
 
-    :param 1: The predicted results of the search query. This is the output of search().
+    :prediction: The predicted results of the search query. This is the output of Search().
 
     :return: Prints a human readable list of the ranked search results to the screen.
     """
@@ -136,7 +148,7 @@ def pretty_print_results(prediction):
         print("\n")
 
 
-def formatted_search_results(search_query: str, pipe, filters=None, top_k: int = 5):
+def formatted_search_results(search_query: str, pipe, filters=None, top_k: int=5):
     """
     Format hybrid search results
     """
@@ -152,7 +164,7 @@ def formatted_search_results(search_query: str, pipe, filters=None, top_k: int =
         }
     else:
         # This only runs if the query has passed a validation check
-        results = hybrid_search(search_query, pipe, filters=filters, top_k=top_k)
+        results = Search(search_query, pipe, filters=filters, top_k=top_k).hybrid_search()
 
         docs = []
         for doc in results["ranker"]['documents']:

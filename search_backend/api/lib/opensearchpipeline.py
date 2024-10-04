@@ -68,7 +68,7 @@ def run_indexing_pipeline(dataset, document_store: OpenSearchDocumentStore, cfg,
 
 
 
-class RetrievalPipeline():
+class RetrievalPipeline:
     """
     Class to set up the retrieval pipeline. Three options for the type of retrieval:
      - Hybrid (BM25 + dense embedding)
@@ -78,6 +78,7 @@ class RetrievalPipeline():
 
     def __init__(self, document_store: OpenSearchDocumentStore, dense_embedding_model: str=None, rerank_model: str=None):
         """
+        Args:
         :document_store: An Haystack/OpenSearch document store object, set up elsewhere.
         :dense_embedding_model: Name of the embedding model to use (assumes model is available from HuggingFace)
             for a semantic/hybrid search. Leave blank if using a BM25 search.

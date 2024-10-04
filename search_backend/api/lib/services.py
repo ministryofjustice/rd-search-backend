@@ -8,7 +8,7 @@ from search_backend.api.lib.config import get_config
 from search_backend.api.lib.aws import get_aws_session
 from search_backend.api.lib.dummyqueryservice import DummyQueryService
 from search_backend.api.lib.hybridqueryservice import HybridQueryService
-from search_backend.api.lib.opensearchpipeline import RetrievalPipeline, setup_rag_pipeline
+from search_backend.api.lib.opensearchpipeline import RetrievalPipeline
 from search_backend.api.lib.s3client import S3Client
 
 

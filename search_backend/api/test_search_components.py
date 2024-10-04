@@ -11,7 +11,7 @@ import argparse
 from search_backend.api.lib import get_config
 from search_backend.api.lib.services import SERVICES
 from search_backend.api.lib.opensearchpipeline import RetrievalPipeline
-from search_backend.api.lib.searchfunctions import bm25_search, semantic_search, hybrid_search, pretty_print_results
+from search_backend.api.lib.searchfunctions import Search, pretty_print_results
 
 cfg = get_config()
 
@@ -34,7 +34,7 @@ print("**************************")
 print("BM25 search results")
 print("**************************")
 bm25_pipeline = pipeline.setup_bm25_pipeline()
-results = bm25_search(test_query, bm25_pipeline, top_k=3)
+results = Search(test_query, bm25_pipeline, top_k=3).bm25_search()
 pretty_print_results(results["bm25_retriever"]['documents'])
 
 print("\n")
@@ -42,7 +42,7 @@ print("**************************")
 print("Semantic search results")
 print("**************************")
 semantic_pipeline = pipeline.setup_semantic_pipeline()
-results = semantic_search(test_query, semantic_pipeline, top_k=3)
+results = Search(test_query, semantic_pipeline, top_k=3).semantic_search()
 pretty_print_results(results["ranker"]['documents'])
 print("\n")
 
@@ -51,6 +51,6 @@ print("**************************")
 print("Hybrid search results")
 print("**************************")
 hybrid_pipeline = pipeline.setup_hybrid_pipeline()
-results = hybrid_search(test_query, hybrid_pipeline, top_k=3)
+results = Search(test_query, hybrid_pipeline, top_k=3).hybrid_search()
 pretty_print_results(results["ranker"]['documents'])
 print("\n")

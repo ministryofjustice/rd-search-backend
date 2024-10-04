@@ -1,5 +1,5 @@
 """
-Example entry point for the data processing
+Example entry point for the data processing and setting up a Document Store for the search
 """
 
 from search_backend.api.lib import get_config
