@@ -45,6 +45,7 @@ def document_store_factory(cfg, create_index=False):
     auth = Urllib3AWSV4SignerAuth(credentials, cfg["AWS_REGION"], "es")
     url = cfg["OPENSEARCH_URL"]
     use_ssl = urlparse(url).scheme == "https"
+    embedding_dim = cfg["embedding_dim"],
 
     # OpenSearch document store
     opensearch_docstore_options = {
@@ -54,7 +55,7 @@ def document_store_factory(cfg, create_index=False):
         "verify_certs": False,
         "connection_class": Urllib3HttpConnection,
         "index": "document",
-        "embedding_dim": 384,
+        "embedding_dim": embedding_dim,
     }
 
     return OpenSearchDocumentStore(create_index=create_index, **opensearch_docstore_options)
