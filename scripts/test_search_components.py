@@ -8,7 +8,7 @@ Example of usage:
 
 import argparse
 
-from search_backend.api.lib import get_config
+from search_backend.api.lib.config import get_config
 from search_backend.api.lib.services import SERVICES
 from search_backend.api.lib.opensearchpipeline import RetrievalPipeline
 from search_backend.api.lib.searchfunctions import Search, pretty_print_results

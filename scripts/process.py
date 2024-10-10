@@ -2,7 +2,7 @@
 Example entry point for the data processing and setting up a Document Store for the search
 """
 
-from search_backend.api.lib import get_config
+from search_backend.api.lib.config import get_config
 from search_backend.api.lib.services import SERVICES
 from search_backend.api.lib.read_data_functions import read_docs
 from search_backend.api.lib.opensearchpipeline import run_indexing_pipeline
