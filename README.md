@@ -1,4 +1,9 @@
-# rd-hr-smart-knowledge-management
+# rd-search-backend
+
+Backend developed by the Digital R&D team for hybrid search apps. Related repos:
+
+ - https://github.com/ministryofjustice/rd-service-catalogue
+ - https://github.com/ministryofjustice/rd-ai-nexus
 
 ## Dev
 
@@ -9,8 +14,6 @@ dependencies:
 python3 -m venv venv
 source venv/bin/activate
 pip install -e '.[dev, search_backend]'
-pip install hatchling
-pre-commit install
 ```
 
 To build the package manifest with hatchling, run `hatchling build` from
