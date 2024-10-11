@@ -6,10 +6,9 @@ from opensearchpy import OpenSearch, Urllib3HttpConnection, Urllib3AWSV4SignerAu
 
 from search_backend.api.lib.config import get_config
 from search_backend.api.lib.aws import get_aws_session
-from search_backend.api.lib.bedrockqueryservice import BedrockQueryService
 from search_backend.api.lib.dummyqueryservice import DummyQueryService
 from search_backend.api.lib.hybridqueryservice import HybridQueryService
-from search_backend.api.lib.opensearchpipeline import setup_hybrid_pipeline, setup_rag_pipeline
+from search_backend.api.lib.opensearchpipeline import RetrievalPipeline
 from search_backend.api.lib.s3client import S3Client
 
 
@@ -46,6 +45,7 @@ def document_store_factory(cfg, create_index=False):
     auth = Urllib3AWSV4SignerAuth(credentials, cfg["AWS_REGION"], "es")
     url = cfg["OPENSEARCH_URL"]
     use_ssl = urlparse(url).scheme == "https"
+    embedding_dim = cfg["embedding_dim"],
 
     # OpenSearch document store
     opensearch_docstore_options = {
@@ -55,7 +55,7 @@ def document_store_factory(cfg, create_index=False):
         "verify_certs": False,
         "connection_class": Urllib3HttpConnection,
         "index": "document",
-        "embedding_dim": 384,
+        "embedding_dim": embedding_dim,
     }
 
     return OpenSearchDocumentStore(create_index=create_index, **opensearch_docstore_options)
@@ -67,22 +67,8 @@ def query_service_factory():
     document_store = document_store_factory(cfg, create_index=False)
 
     if cfg["QUERY_SERVICE"] == "hybrid":
-        return HybridQueryService(
-            setup_hybrid_pipeline(document_store, cfg["dense_embedding_model"], cfg["rerank_model"])
-        )
-    elif cfg["QUERY_SERVICE"] == "bedrock":
-        return BedrockQueryService(
-            setup_rag_pipeline(
-                setup_hybrid_pipeline(
-                    document_store,
-                    cfg["dense_embedding_model"],
-                    cfg["rerank_model"]
-                ),
-                cfg["llm"],
-                cfg["BEDROCK_REGION"],
-                get_aws_session(cfg, cfg["BEDROCK_REGION"]).get_credentials()
-            )
-        )
+        pipeline = RetrievalPipeline(document_store, cfg["dense_embedding_model"], cfg["rerank_model"])
+        return HybridQueryService(pipeline.setup_hybrid_pipeline())
     else:
         return DummyQueryService(
             Path(__file__).parent / "../fixtures/dummyanswers.json"

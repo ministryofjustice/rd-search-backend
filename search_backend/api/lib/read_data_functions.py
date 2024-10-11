@@ -1,4 +1,5 @@
 """
+A collection of functions to help read data from PDFs, Word docs, and Powerpoints.
 """
 
 import re
@@ -14,7 +15,7 @@ from pptx import Presentation
 from search_backend.api.lib.s3client import S3Client
 
 
-def read_pdf_gen(f, title, fname):
+def _read_pdf_gen(f, title, fname):
 
     """
     Generator to read pages from PDF
@@ -85,7 +86,7 @@ def read_pdf_gen(f, title, fname):
         yield page_dict
 
 
-def read_word(f, title, fname):
+def _read_word(f, title, fname):
     
     """
     Generator to read paragraphs from Word doc.
@@ -128,7 +129,6 @@ def read_word(f, title, fname):
             'title': title,
             'path': fname,
             'page': 0,
-            # 'para': ii+1,
         },
         'content': word_text,
     }
@@ -136,7 +136,7 @@ def read_word(f, title, fname):
     return word_dict
 
 
-def read_ppt_gen(f, title, fname):
+def _read_ppt_gen(f, title, fname):
     
     """
     Generator to read paragraphs from Powerpoint doc
@@ -159,7 +159,6 @@ def read_ppt_gen(f, title, fname):
                 for jj, para in enumerate(shape.text_frame.paragraphs):
                     para_text = ' '.join([run.text for run in para.runs])
                     para_text = re.sub(r'\s+', ' ', para_text).strip()
-                    # para_text = re.sub(r'\n+', '\n', para_text)
                     para_text = para_text.replace('\xa0', '')
                     if para_text != '':
                         # Make sure the paragraph contains text
@@ -190,7 +189,6 @@ def read_ppt_gen(f, title, fname):
                     'title': title,
                     'path': fname,
                     'page': ii+1,
-                    # 'para': 0
                 },
                 'content': slide_text,
             }
@@ -226,11 +224,11 @@ def read_docs(s3client: S3Client, fnames: list[str]):
 
         with BytesIO(fs) as f:
             if re.search('.pdf$', fname):
-                doc_list = [page for page in read_pdf_gen(f, title, fname)]
+                doc_list = [page for page in _read_pdf_gen(f, title, fname)]
             elif re.search('.doc$|.docx$', fname):
-                doc_list = [read_word(f, title, fname)]
+                doc_list = [_read_word(f, title, fname)]
             elif re.search('.ppt$|.pptx$', fname):
-                doc_list = [para for para in read_ppt_gen(f, title, fname)]
+                doc_list = [para for para in _read_ppt_gen(f, title, fname)]
             else:
                 print(f"File format not accepted for {fname}")
 

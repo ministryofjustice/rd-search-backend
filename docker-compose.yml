@@ -27,7 +27,7 @@ services:
       AWS_URL_S3: http://localstack:4566
       AWS_REGION: eu-west-2
       S3_BUCKET: mojap-rd
-      S3_KEY_PREFIX: gdd_capability
+      S3_KEY_PREFIX: demo_folder
       S3_REGION: eu-west-1
       BEDROCK_REGION: eu-west-3
 
@@ -35,7 +35,7 @@ services:
       # AWS_URL and AWS_REGION are set as env vars (above); es = "elasticsearch";
       # <OPENSEARCH_DOMAIN> should match OPENSEARCH_DOMAIN env var in the localstack container;
       # in the Cloud Platform, this URL is derived from a secret instead
-      OPENSEARCH_URL: http://localstack:4566/opensearch/eu-west-2/rd-hr
+      OPENSEARCH_URL: http://localstack:4566/opensearch/eu-west-2/rd-demo
 
       # which query service implementation to use
       QUERY_SERVICE: hybrid
@@ -54,11 +54,11 @@ services:
       # see https://docs.localstack.cloud/user-guide/aws/opensearch/
       OPENSEARCH_ENDPOINT_STRATEGY: path
 
-      OPENSEARCH_DOMAIN: rd-hr
+      OPENSEARCH_DOMAIN: rd-demo
 
       AWS_DEFAULT_REGION: eu-west-2
       S3_BUCKET: mojap-rd
-      S3_KEY_PREFIX: gdd_capability
+      S3_KEY_PREFIX: demo_folder
     healthcheck:
       test: bash /scripts/wait/healthcheck.sh
       interval: 5s
