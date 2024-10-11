@@ -19,7 +19,7 @@ defaults = {
     "AWS_URL_S3": "http://localstack:4566",
     "AWS_REGION": "eu-west-2",
     "S3_BUCKET": "mojap-rd",
-    "S3_KEY_PREFIX": "gdd_capability/gdd_capability_pay",
+    "S3_KEY_PREFIX": "demo_folder",
     "OPENSEARCH_URL": "http://localstack:4566",
     "QUERY_SERVICE": "hybrid",
 

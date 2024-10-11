@@ -17,7 +17,7 @@ parser = argparse.ArgumentParser(prog="Document uploader")
 parser.add_argument("zipfile", help="Path to zip file")
 parser.add_argument("destdir", help="Destination directory to unzip to")
 parser.add_argument("--bucket", help="S3 bucket to upload files to", default="mojap-rd")
-parser.add_argument("--prefix", help="Prefix to put in front of S3 keys for each uploaded file", default="gdd_capability/gdd_capability_pay")
+parser.add_argument("--prefix", help="Prefix to put in front of S3 keys for each uploaded file", default="demo_folder")
 parser.add_argument('--local', action=argparse.BooleanOptionalAction, dest='local', help="Use --local for localstack, or --no-local for an s3 bucket on the MoJ Analytical Platform", default=False)
 
 args = parser.parse_args()
