@@ -35,25 +35,15 @@ classifiers = [
 ]
 dependencies = [
     "flask>=3.0.3, <4",
-    "boto3",
     "opensearch-py",
     "opensearch-haystack",
     "haystack-ai",
-    "fastembed-haystack",
-    "amazon-bedrock-haystack",
-    "accelerate",
     "requests>=2.32.3, <3",
     "accelerate>=0.33.0, <1",
-    "amazon-bedrock-haystack>=0.9.3, <1",
     "config>=0.5.1, <1",
     "fastembed-haystack>=1.2.0, <2",
     "h2>=4.1.0, <5",
     "opensearch-haystack>=0.9.0, <1",
-    "pdfminer.six==20240706",
-    "python-docx>=1.1.2, <2",
-    "python-pptx>=0.6.23, <1",
-    "qdrant-haystack>=4.1.2, <5",
-    "s3fs==2024.6.1",
     "sentence-transformers>=3.0.1, <4",
 ]
 
@@ -64,6 +54,16 @@ dev = [
     "openpyxl==3.1.5",
     "pip-chill==1.0.3",
     "hatchling",
+]
+data_read = [
+    "boto3",
+    "s3fs==2024.6.1",
+    "pdfminer.six==20240706",
+    "python-docx>=1.1.2, <2",
+    "python-pptx>=0.6.23, <1",
+]
+bedrock = [
+    "amazon-bedrock-haystack>=0.9.3, <1",
 ]
 
 [tool.coverage.run]
