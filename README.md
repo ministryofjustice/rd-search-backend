@@ -5,6 +5,10 @@ Backend developed by the Digital R&D team for hybrid search apps. Related repos:
  - https://github.com/ministryofjustice/rd-service-catalogue
  - https://github.com/ministryofjustice/rd-ai-nexus
 
+## Installation
+
+Install with `pip install git+ssh://git@github.com/ministryofjustice/rd-search-backend.git`
+
 ## Dev
 
 Working on the app relies on Python dependencies being installed locally. First set up a virtualenv and install 
