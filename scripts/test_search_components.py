@@ -10,8 +10,9 @@ import argparse
 
 from search_backend.api.lib.config import get_config
 from search_backend.api.lib.services import SERVICES
-from search_backend.api.lib.opensearchpipeline import RetrievalPipeline
-from search_backend.api.lib.searchfunctions import Search, pretty_print_results
+from search_backend.api.lib.retrievalservice import RetrievalPipeline
+from search_backend.api.lib.searchservice import Search
+from search_backend.api.lib.search_formatting_functions import pretty_print_results
 
 cfg = get_config()
 

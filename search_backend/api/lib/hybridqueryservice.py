@@ -1,6 +1,6 @@
 from typing import Optional
 
-from search_backend.api.lib.searchfunctions import formatted_search_results
+from search_backend.api.lib.search_formatting_functions import formatted_search_results
 
 
 class HybridQueryService:
