@@ -1,8 +1,21 @@
 import boto3
 
 
-# env: dict derived from get_config()
 def get_aws_session(env: dict, aws_region: str) -> boto3.Session:
+    """
+    Get an AWS session, either using a token file (when running on the Cloud Platform)
+    or access and secret access keys (locally).
+    The intention is that this gives a simple way to access AWS credentials.
+
+    Note that the token expires on the Cloud Platform, so the session should be
+    regenerated every time a call is made to AWS.
+
+    :param env: dict containing either:
+        AWS_WEB_IDENTITY_TOKEN_FILE and AWS_ROLE_ARN
+      OR
+        AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY
+    :param aws_region: AWS region string, e.g. "eu-west-1"
+    """
     aws_web_identity_token_file = env.get("AWS_WEB_IDENTITY_TOKEN_FILE")
     aws_role_arn = env.get("AWS_ROLE_ARN")
 
