@@ -14,7 +14,7 @@ from haystack_integrations.components.embedders.fastembed import (
 from haystack_integrations.document_stores.opensearch import OpenSearchDocumentStore
 
 
-def run_indexing_pipeline(dataset, document_store: OpenSearchDocumentStore, cfg, semantic: bool=False):
+def run_indexing_pipeline(dataset: list[dict[str, any]], document_store: OpenSearchDocumentStore, cfg: dict=None, semantic: bool=False):
     """
     This function splits the data into chunks and writes to a document store. If the 'semantic' arg
     is set to True then the chunks of text are embedded and written to a vector store.
@@ -62,7 +62,7 @@ def run_indexing_pipeline(dataset, document_store: OpenSearchDocumentStore, cfg,
     indexing.run({"document_splitter": {"documents": docs}})
 
 
-def delete_docs(document_ids: List[str], id_metafield: str, document_store: OpenSearchDocumentStore):
+def delete_docs(document_store: OpenSearchDocumentStore, document_ids: list[str], id_metafield: str):
     """
     Wrapper to show how to remove documents from the OpenSearch index.
 
@@ -80,6 +80,6 @@ def delete_docs(document_ids: List[str], id_metafield: str, document_store: Open
         "value": document_ids,
     }
     results = document_store.filter_documents(filters=filters)
-    document_ids = {result.meta['_id'] for result in results['documents']}
+    doc_ids = {result.id for result in results}
 
-    document_store.delete_documents(document_ids)
+    document_store.delete_documents(doc_ids)
