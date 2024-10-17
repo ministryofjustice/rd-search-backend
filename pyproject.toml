@@ -36,14 +36,13 @@ classifiers = [
 dependencies = [
     "flask>=3.0.3, <4",
     "opensearch-py",
-    "opensearch-haystack",
-    "haystack-ai",
+    "haystack-ai>=2.6.1, <3",
     "requests>=2.32.3, <3",
     "accelerate>=0.33.0, <1",
     "config>=0.5.1, <1",
     "fastembed-haystack>=1.2.0, <2",
     "h2>=4.1.0, <5",
-    "opensearch-haystack>=0.9.0, <1",
+    "opensearch-haystack>=1.0.0, <2",
     "sentence-transformers>=3.0.1, <4",
 ]
 
