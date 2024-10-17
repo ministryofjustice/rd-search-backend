@@ -83,7 +83,9 @@ def formatted_search_results(search_query: str, pipe, filters=None, top_k: int=5
         }
     else:
         # This only runs if the query has passed a validation check
-        results = Search(search_query, pipe, filters=filters, top_k=top_k).hybrid_search()
+        search_init = Search(pipe)
+        results = search_init.hybrid_search(search_query, filters=filters, top_k=top_k)
+
 
         docs = []
         for doc in results["ranker"]['documents']:
