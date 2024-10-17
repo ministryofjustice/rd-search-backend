@@ -43,7 +43,7 @@ dependencies = [
     "config>=0.5.1, <1",
     "fastembed-haystack>=1.2.0, <2",
     "h2>=4.1.0, <5",
-    "opensearch-haystack>=0.9.0, <1",
+    "opensearch-haystack==1.0.0",
     "sentence-transformers>=3.0.1, <4",
 ]
 
