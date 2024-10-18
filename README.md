@@ -80,8 +80,6 @@ docker compose build ; docker compose up
 
 ...to be continued.
 
-
-
 4. Run process.py to process data and write index into opensearch:
 
 ```

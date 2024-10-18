@@ -9,7 +9,6 @@ from haystack.components.preprocessors.document_splitter import DocumentSplitter
 from haystack import Pipeline
 from haystack_integrations.components.embedders.fastembed import (
     FastembedDocumentEmbedder,
-    FastembedTextEmbedder,
 )
 from haystack_integrations.document_stores.opensearch import OpenSearchDocumentStore
 
