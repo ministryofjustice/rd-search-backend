@@ -53,6 +53,8 @@ dev = [
     "openpyxl==3.1.5",
     "pip-chill==1.0.3",
     "hatchling",
+    "mockito>=1.5.1, <2",
+    "pytest>=8.3.3, <9",
 ]
 data_read = [
     "boto3",
