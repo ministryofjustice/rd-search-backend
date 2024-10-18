@@ -1,4 +1,4 @@
-from typing import Iterable
+from typing import Iterable, Any
 
 from haystack import Pipeline, Document
 from haystack.components.preprocessors import DocumentSplitter
@@ -59,11 +59,12 @@ class IndexingPipeline:
         """
         return self.indexing.run({"document_splitter": {"documents": docs}})
 
-    def delete_docs(self, document_ids: list[str], id_metafield: str):
+    def delete_docs(self, document_ids: list[Any], id_metafield: str):
         """
         Remove documents from the OpenSearch index.
 
-        :param document_ids: List of document ids to delete. These are IDs created by Haystack/OpenSearch.
+        :param document_ids: List of document ids to delete. These are values of the id_metafield field of
+        documents in the document store which are to be deleted.
         :param id_metafield: The name of the field in the docstore metadata containing identifiers to use
             to select docs for deletion.
         """
