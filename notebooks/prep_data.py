@@ -33,6 +33,10 @@ def format_doc_dict(doc: dict, field: str):
         return None
     else:
         meta = doc.copy()
+
+        meta['db_id'] = f"{meta['id']}"
+        meta.pop('id')
+
         meta['matched_field'] = field
 
         doc_dict = {
@@ -58,6 +62,7 @@ def prep_project_data(project_list: list[dict[str, any]]):
 
     # If the data contains multiple fields we'd want to search over, list them here
     fields_to_search = [
+        'id',
         'name',
         'description',
         'reasons_for_use',
