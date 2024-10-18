@@ -22,7 +22,8 @@ class RetrievalPipeline:
      - BM25
     """
 
-    def __init__(self, document_store: OpenSearchDocumentStore, dense_embedding_model: str=None, rerank_model: str=None):
+    def __init__(self, document_store: OpenSearchDocumentStore, dense_embedding_model: str = None,
+                 rerank_model: str = None):
         """
         Args:
         :document_store: An Haystack/OpenSearch document store object, set up elsewhere.
@@ -75,7 +76,6 @@ class RetrievalPipeline:
 
         return hybrid_retrieval
 
-
     def setup_semantic_pipeline(self) -> Pipeline:
         """
         This function sets up a dense embedding retrieval pipeline based on an existing document store.
@@ -95,7 +95,6 @@ class RetrievalPipeline:
         retrieval.connect("embedding_retriever", "ranker")
 
         return retrieval
-
 
     def setup_bm25_pipeline(self) -> Pipeline:
         """
