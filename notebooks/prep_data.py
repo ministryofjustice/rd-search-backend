@@ -8,7 +8,7 @@ def replace_newlines(project_list: list[dict[str, any]]):
     """
 
     project_list = [
-        {k : v.replace('\n', ' ') if v is not None else v for k, v in project.items()}
+        {k : v.replace('\n', ' ') if isinstance(v, str) else v for k, v in project.items()}
         for project in project_list
     ]
 
@@ -27,7 +27,6 @@ def format_doc_dict(doc: dict, field: str):
     """
 
     content = doc[field]
-    # doc.pop(field)
 
     if content is None:
         # We can't index None values, so returning None here allows us to skip fields where no info is provided
@@ -59,11 +58,11 @@ def prep_project_data(project_list: list[dict[str, any]]):
 
     # If the data contains multiple fields we'd want to search over, list them here
     fields_to_search = [
-        'project_name',
+        'name',
         'description',
         'reasons_for_use',
-        'problem_solved_by_the_initiative',
-        'metrics_or_intended_impacts'
+        'problems_solved',
+        'metrics'
     ]
 
     dataset = [
