@@ -35,7 +35,7 @@ class TestIndexingPipeline(unittest.TestCase):
         verify(self.mock_pipeline).add_component("document_writer", any(DocumentWriter))
         verify(self.mock_pipeline).connect("document_splitter", "document_writer")
 
-    def test_run_method(self):
+    def test_index_docs_method(self):
         pipeline = IndexingPipeline(self.mock_document_store, "dense_model", indexing=self.mock_pipeline)
         mock_docs = [mock(Document), mock(Document)]
         expected_result = {"some": "result"}
