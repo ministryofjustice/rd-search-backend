@@ -51,7 +51,7 @@ class IndexingPipeline:
 
         self.indexing = indexing
 
-    def run(self, docs: Iterable[Document]):
+    def index_docs(self, docs: Iterable[Document]):
         """
         Split the data into chunks and write it to the document store.
 

@@ -6,10 +6,7 @@ import os
 from haystack import Pipeline
 from haystack.components.joiners import DocumentJoiner
 from haystack.components.rankers import TransformersSimilarityRanker
-from haystack_integrations.components.embedders.fastembed import (
-    FastembedDocumentEmbedder,
-    FastembedTextEmbedder,
-)
+from haystack_integrations.components.embedders.fastembed import FastembedTextEmbedder
 from haystack_integrations.components.retrievers.opensearch import OpenSearchBM25Retriever, OpenSearchEmbeddingRetriever
 from haystack_integrations.document_stores.opensearch import OpenSearchDocumentStore
 

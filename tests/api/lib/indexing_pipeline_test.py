@@ -6,7 +6,7 @@ from haystack.components.writers import DocumentWriter
 from haystack_integrations.components.embedders.fastembed import FastembedDocumentEmbedder
 from haystack_integrations.document_stores.opensearch import OpenSearchDocumentStore
 from mockito import mock, when, verify, any
-from mockito.matchers import eq, captor
+from mockito.matchers import captor
 
 from search_backend.api.lib.indexing_pipeline import IndexingPipeline
 
@@ -40,9 +40,9 @@ class TestIndexingPipeline(unittest.TestCase):
         mock_docs = [mock(Document), mock(Document)]
         expected_result = {"some": "result"}
 
-        when(self.mock_pipeline).run({"document_splitter": {"documents": mock_docs}}).thenReturn(expected_result)
+        when(self.mock_pipeline).index_docs({"document_splitter": {"documents": mock_docs}}).thenReturn(expected_result)
 
-        result = pipeline.run(mock_docs)
+        result = pipeline.index_docs(mock_docs)
 
         self.assertEqual(result, expected_result, f"Expected {expected_result}, but got {result}")
 

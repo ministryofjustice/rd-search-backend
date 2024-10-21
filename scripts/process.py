@@ -26,4 +26,4 @@ indexer = IndexingPipeline(document_store, cfg["dense_embedding_model"], semanti
 docs = [
     Document(**content) for content in dataset
 ]
-indexer.run(docs)
+indexer.index_docs(docs)
