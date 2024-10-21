@@ -28,6 +28,12 @@ To build the package manifest with hatchling, run `hatchling build` from
 terminal at the project root. By default this writes to ./dist/, but can be
 directed with the `-d` flag.
 
+### Run the unit tests
+
+```
+pytest tests
+```
+
 ### Adding new dependencies
 
 If you need to add a new dependency, insert it into pyproject.toml. Set upper and lower bounds for the versions.
@@ -79,8 +85,6 @@ docker compose build ; docker compose up
 3. Get docs as a json file, e.g. ~/Downloads/documents.json
 
 ...to be continued.
-
-
 
 4. Run process.py to process data and write index into opensearch:
 

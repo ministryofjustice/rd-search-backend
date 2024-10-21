@@ -2,10 +2,12 @@
 Example entry point for the data processing and setting up a Document Store for the search
 """
 
+from haystack import Document
+
 from search_backend.api.lib.config import get_config
-from search_backend.api.lib.services import SERVICES
+from search_backend.api.lib.indexing_pipeline import IndexingPipeline
 from search_backend.api.lib.read_data_functions import read_docs
-from search_backend.api.lib.indexing_functions import run_indexing_pipeline
+from search_backend.api.lib.services import SERVICES
 
 cfg = get_config()
 
@@ -20,4 +22,8 @@ file_list = [obj["Key"] for obj in objs]
 dataset = read_docs(s3client, file_list)
 
 # Create the document store containing the embeddings
-run_indexing_pipeline(dataset, document_store, cfg, semantic=True)
+indexer = IndexingPipeline(document_store, cfg["dense_embedding_model"], semantic=True)
+docs = [
+    Document(**content) for content in dataset
+]
+indexer.index_docs(docs)
