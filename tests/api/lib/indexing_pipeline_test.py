@@ -40,7 +40,7 @@ class TestIndexingPipeline(unittest.TestCase):
         mock_docs = [mock(Document), mock(Document)]
         expected_result = {"some": "result"}
 
-        when(self.mock_pipeline).index_docs({"document_splitter": {"documents": mock_docs}}).thenReturn(expected_result)
+        when(self.mock_pipeline).run({"document_splitter": {"documents": mock_docs}}).thenReturn(expected_result)
 
         result = pipeline.index_docs(mock_docs)
 
