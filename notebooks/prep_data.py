@@ -62,7 +62,6 @@ def prep_project_data(project_list: list[dict[str, any]]):
 
     # If the data contains multiple fields we'd want to search over, list them here
     fields_to_search = [
-        'id',
         'name',
         'description',
         'reasons_for_use',
