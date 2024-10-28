@@ -25,23 +25,23 @@ class Search:
         self.pipeline = pipeline
 
 
-    def hybrid_search(self, search_query: str, filters: dict=None, top_k: int=10):
+    def hybrid_search(self, search_query: str, filters: dict=None, top_k: int=10, threshold: float=0.):
         """
         Run a hybrid search pipeline and return results.
 
-        Args:
-            :search_query: The search query in the form of a text string.
-            :filters: Metadata filters. These should be formatted like:
-                ```
-                filters = {
-                    "operator": "AND",
-                    "conditions": [
-                        {"field": "meta.type", "operator": "==", "value": "article"},
-                        {"field": "meta.genre", "operator": "in", "value": ["economy", "politics"]},
-                    ],
-                }
-                ```
-            :top_k: How many results to return.
+        :param search_query: The search query in the form of a text string.
+        :param filters: Metadata filters. These should be formatted like:
+            ```
+            filters = {
+                "operator": "AND",
+                "conditions": [
+                    {"field": "meta.type", "operator": "==", "value": "article"},
+                    {"field": "meta.genre", "operator": "in", "value": ["economy", "politics"]},
+                ],
+            }
+            ```
+        :param top_k: How many results to return.
+        :param threshold: Set a threshold match score (between 0 and 1)
 
         :return: A list of ranked search results.
         """
@@ -55,25 +55,36 @@ class Search:
             }
         )
 
-        return prediction
+        if "ranker" not in prediction:
+            return []
+        elif "documents" not in prediction["ranker"]:
+            return []
+        else:
+            docs = prediction["ranker"]["documents"]
 
-    def semantic_search(self, search_query: str, filters: dict=None, top_k: int=10):
+        # Filter by threshold score
+        if threshold > 0:
+            docs = [doc for doc in docs if doc.score > threshold]
+
+        return docs
+
+    def semantic_search(self, search_query: str, filters: dict=None, top_k: int=10, threshold: float=0.):
         """
         Run a semantic search pipeline and return results.
 
-        Args:
-            :search_query: The search query in the form of a text string.
-            :filters: Metadata filters. These should be formatted like:
-                ```
-                filters = {
-                    "operator": "AND",
-                    "conditions": [
-                        {"field": "meta.type", "operator": "==", "value": "article"},
-                        {"field": "meta.genre", "operator": "in", "value": ["economy", "politics"]},
-                    ],
-                }
-                ```
-            :top_k: How many results to return.
+        :param search_query: The search query in the form of a text string.
+        :param filters: Metadata filters. These should be formatted like:
+            ```
+            filters = {
+                "operator": "AND",
+                "conditions": [
+                    {"field": "meta.type", "operator": "==", "value": "article"},
+                    {"field": "meta.genre", "operator": "in", "value": ["economy", "politics"]},
+                ],
+            }
+            ```
+        :param top_k: How many results to return.
+        :param threshold: Set a threshold match score (between 0 and 1)
 
         :return: A list of ranked search results.
         """
@@ -87,25 +98,35 @@ class Search:
             }
         )
 
-        return prediction
+        if "ranker" not in prediction:
+            return []
+        elif "documents" not in prediction["ranker"]:
+            return []
+        else:
+            results = prediction["ranker"]["documents"]
+
+        # Filter by threshold score
+        if threshold > 0:
+            results = [result for result in results if result.score > threshold]
+
+        return results
 
     def bm25_search(self, search_query: str, filters: dict=None, top_k: int=100):
         """
         Run a BM25 search pipeline and return results.
 
-        Args:
-            :search_query: The search query in the form of a text string.
-            :filters: Metadata filters. These should be formatted like:
-                ```
-                filters = {
-                    "operator": "AND",
-                    "conditions": [
-                        {"field": "meta.type", "operator": "==", "value": "article"},
-                        {"field": "meta.genre", "operator": "in", "value": ["economy", "politics"]},
-                    ],
-                }
-                ```
-            :top_k: How many results to return.
+        :param search_query: The search query in the form of a text string.
+        :param filters: Metadata filters. These should be formatted like:
+            ```
+            filters = {
+                "operator": "AND",
+                "conditions": [
+                    {"field": "meta.type", "operator": "==", "value": "article"},
+                    {"field": "meta.genre", "operator": "in", "value": ["economy", "politics"]},
+                ],
+            }
+            ```
+        :param top_k: How many results to return.
 
         :return: A list of ranked search results.
         """
@@ -116,4 +137,4 @@ class Search:
             }
         )
 
-        return prediction
+        return prediction["bm25_retriever"]["documents"]
