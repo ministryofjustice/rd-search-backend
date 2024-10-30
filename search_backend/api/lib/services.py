@@ -46,6 +46,7 @@ def document_store_factory(cfg, create_index=False):
     url = cfg["OPENSEARCH_URL"]
     use_ssl = urlparse(url).scheme == "https"
     embedding_dim = cfg["embedding_dim"],
+    batch_size = cfg["index_batch_size"]
 
     # OpenSearch document store
     opensearch_docstore_options = {
@@ -56,6 +57,7 @@ def document_store_factory(cfg, create_index=False):
         "connection_class": Urllib3HttpConnection,
         "index": "document",
         "embedding_dim": embedding_dim,
+        "batch_size": batch_size,
     }
 
     return OpenSearchDocumentStore(create_index=create_index, **opensearch_docstore_options)
