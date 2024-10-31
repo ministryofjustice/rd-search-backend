@@ -23,6 +23,8 @@ defaults = {
     "OPENSEARCH_URL": "http://localstack:4566",
     "QUERY_SERVICE": "hybrid",
 
+    "index_batch_size": 10,
+
     # Select embedding model for the semantic search. This should be a sentence-similarity
     # model available on Huggingface: https://huggingface.co/models?pipeline_tag=sentence-similarity
     "dense_embedding_model": "snowflake/snowflake-arctic-embed-xs",

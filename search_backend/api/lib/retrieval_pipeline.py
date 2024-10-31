@@ -33,7 +33,11 @@ class RetrievalPipeline:
         self.retrieval = Pipeline()
         self.document_store = document_store
 
-        self.bm25_retriever = OpenSearchBM25Retriever(document_store=self.document_store, scale_score=True)
+        self.bm25_retriever = OpenSearchBM25Retriever(
+            document_store=self.document_store,
+            scale_score=True,
+            fuzziness="AUTO",
+        )
         self.embedding_retriever = OpenSearchEmbeddingRetriever(document_store=self.document_store)
 
         if dense_embedding_model is not None:

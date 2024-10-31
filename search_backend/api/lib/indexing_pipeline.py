@@ -19,6 +19,9 @@ class IndexingPipeline:
             dense_embedding_model: str,
             semantic: bool = False,
             indexing: Pipeline = Pipeline(),
+            split_length: int = 64,
+            split_overlap: int = 8,
+            split_threshold: int = 0
     ):
         """
         :param document_store: DocumentStore object that has been set up elsewhere
@@ -29,7 +32,12 @@ class IndexingPipeline:
         """
         self.document_store = document_store
 
-        document_splitter = DocumentSplitter(split_length=128, split_overlap=32)
+        document_splitter = DocumentSplitter(
+            split_by="word",
+            split_length=split_length,
+            split_overlap=split_overlap,
+            split_threshold=split_threshold,
+        )
 
         indexing.add_component("document_splitter", document_splitter)
 
