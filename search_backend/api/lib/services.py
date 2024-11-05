@@ -1,4 +1,3 @@
-from pathlib import Path
 from urllib.parse import urlparse
 
 from haystack_integrations.document_stores.opensearch import OpenSearchDocumentStore
@@ -6,10 +5,9 @@ from opensearchpy import OpenSearch, Urllib3HttpConnection, Urllib3AWSV4SignerAu
 
 from search_backend.api.lib.config import get_config
 from search_backend.api.lib.aws import get_aws_session
-from search_backend.api.lib.dummyqueryservice import DummyQueryService
-from search_backend.api.lib.hybridqueryservice import HybridQueryService
 from search_backend.api.lib.retrieval_pipeline import RetrievalPipeline
 from search_backend.api.lib.s3client import S3Client
+from search_backend.api.lib.search import Search
 
 
 # S3 needs a specific region if we're using Analytical Platform buckets
@@ -63,22 +61,22 @@ def document_store_factory(cfg, create_index=False):
     return OpenSearchDocumentStore(create_index=create_index, **opensearch_docstore_options)
 
 
-# set up the hybrid pipeline with the read-only opensearch document store
-def query_service_factory():
+def retrieval_pipeline_factory() -> RetrievalPipeline:
+    """
+    Construct a retrieval pipeline with read-only document store pointed at opensearch
+    """
     cfg = get_config()
     document_store = document_store_factory(cfg, create_index=False)
+    return RetrievalPipeline(document_store, cfg["dense_embedding_model"], cfg["rerank_model"])
 
-    if cfg["QUERY_SERVICE"] == "hybrid":
-        pipeline = RetrievalPipeline(document_store, cfg["dense_embedding_model"], cfg["rerank_model"])
-        return HybridQueryService(pipeline.setup_hybrid_pipeline())
-    else:
-        return DummyQueryService(
-            Path(__file__).parent / "../fixtures/dummyanswers.json"
-        )
+
+def search_factory():
+    retrieval_pipeline = retrieval_pipeline_factory()
+    return Search(pipeline=retrieval_pipeline.setup_hybrid_pipeline())
 
 
 SERVICES = {
-    "queryservicefactory": query_service_factory,
+    "searchfactory": search_factory,
     "s3clientfactory": s3client_factory,
     "opensearchclientfactory": opensearch_client_factory,
     "documentstorefactory": document_store_factory,
