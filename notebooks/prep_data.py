@@ -31,6 +31,9 @@ def format_doc_dict(doc: dict, field: str):
     if content is None:
         # We can't index None values, so returning None here allows us to skip fields where no info is provided
         return None
+    elif isinstance(content, str) and (content.strip() == ""):
+        # Also skip fields containing empty strings
+        return None
     else:
         meta = doc.copy()
 
