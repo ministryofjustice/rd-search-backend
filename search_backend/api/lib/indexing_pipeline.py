@@ -18,7 +18,7 @@ class IndexingPipeline:
             document_store: OpenSearchDocumentStore,
             dense_embedding_model: str,
             semantic: bool = False,
-            indexing: Pipeline = Pipeline(),
+            indexing: Pipeline = None,
             split_length: int = 64,
             split_overlap: int = 8,
             split_threshold: int = 0
@@ -30,6 +30,10 @@ class IndexingPipeline:
         the chunks of text are embedded and written to a vector store.
         :param indexing: pipeline to do the indexing, which will be configured in this constructor
         """
+
+        if indexing is None:
+            indexing = Pipeline()
+
         self.document_store = document_store
 
         document_splitter = DocumentSplitter(
