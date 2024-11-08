@@ -1,6 +1,5 @@
 import os
 
-from search_backend.api.lib.s3client import S3Client
 
 defaults = {
     # either specify AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY,
