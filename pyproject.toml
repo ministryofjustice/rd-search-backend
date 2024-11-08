@@ -64,7 +64,7 @@ data_read = [
     "python-pptx>=0.6.23, <2",
 ]
 bedrock = [
-    "amazon-bedrock-haystack>=0.9.3, <1",
+    "amazon-bedrock-haystack>=0.9.3, <2",
 ]
 
 [tool.coverage.run]
