@@ -65,7 +65,7 @@ data_read = [
 
 [tool.coverage.run]
 source = [
-    "./src"
+    "search_backend"
 ]
 omit = ["**/__init__.py"]
 
