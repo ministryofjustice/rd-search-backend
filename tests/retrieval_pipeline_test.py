@@ -1,6 +1,6 @@
 import unittest
 
-from haystack import Pipeline, Document
+from haystack import Pipeline
 from haystack.components.joiners import DocumentJoiner
 from haystack.components.rankers import TransformersSimilarityRanker
 from haystack_integrations.components.embedders.fastembed import FastembedTextEmbedder
@@ -9,10 +9,9 @@ from haystack_integrations.document_stores.opensearch import OpenSearchDocumentS
 from mockito import mock, when, verify, any
 from mockito.matchers import captor
 
-from search_backend.indexing_pipeline import IndexingPipeline
 from search_backend.retrieval_pipeline import RetrievalPipeline
 
-class TestIndexingPipeline(unittest.TestCase):
+class TestRetrievalPipeline(unittest.TestCase):
     def setUp(self):
         self.mock_document_store = mock(OpenSearchDocumentStore)
         self.dense_embedding_model = "sentence-transformers/all-MiniLM-L6-v2"
