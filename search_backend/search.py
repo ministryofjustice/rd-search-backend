@@ -137,4 +137,11 @@ class Search:
             }
         )
 
-        return prediction["bm25_retriever"]["documents"]
+        if "bm25_retriever" not in prediction:
+            return []
+        elif "documents" not in prediction["bm25_retriever"]:
+            return []
+        else:
+            results = prediction["bm25_retriever"]["documents"]
+
+        return results
