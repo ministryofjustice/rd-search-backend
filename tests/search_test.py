@@ -2,19 +2,8 @@ import unittest
 from haystack import Pipeline, Document
 from haystack_integrations.document_stores.opensearch import OpenSearchDocumentStore
 from mockito import mock, when, verify, any
-from mockito.matchers import captor
-
 from search_backend.retrieval_pipeline import RetrievalPipeline
 from search_backend.search import Search
-
-
-def create_mock_pipeline():
-    # Create a fresh mock pipeline
-    mock_pipeline = mock(Pipeline)
-    when(mock_pipeline).add_component(any(str), any())
-    when(mock_pipeline).connect(any(str), any(str))
-
-    return(mock_pipeline)
 
 
 class TestSearch(unittest.TestCase):
@@ -24,6 +13,13 @@ class TestSearch(unittest.TestCase):
         self.dense_embedding_model = "sentence-transformers/all-MiniLM-L6-v2"
         self.rerank_model = "cross-encoder/ms-marco-MiniLM-L-2-v2"
 
+    def create_mock_pipeline(self):
+        # Create a fresh mock pipeline
+        mock_pipeline = mock(Pipeline)
+        when(mock_pipeline).add_component(any(str), any())
+        when(mock_pipeline).connect(any(str), any(str))
+
+        return(mock_pipeline)
 
     def test_bm25_search_method(self):
         """
@@ -31,7 +27,7 @@ class TestSearch(unittest.TestCase):
         """
 
         # Create a fresh mock pipeline
-        mock_pipeline = create_mock_pipeline()
+        mock_pipeline = self.create_mock_pipeline()
 
         # Set up the Search instance
         bm25_pipeline = RetrievalPipeline(
@@ -58,7 +54,7 @@ class TestSearch(unittest.TestCase):
         """
 
         # Create a fresh mock pipeline
-        mock_pipeline = create_mock_pipeline()
+        mock_pipeline = self.create_mock_pipeline()
 
         # Set up the Search instance
         semantic_pipeline = RetrievalPipeline(
@@ -85,7 +81,7 @@ class TestSearch(unittest.TestCase):
         """
 
         # Create a fresh mock pipeline
-        mock_pipeline = create_mock_pipeline()
+        mock_pipeline = self.create_mock_pipeline()
 
         # Set up the Search instance
         hybrid_pipeline = RetrievalPipeline(
@@ -107,9 +103,12 @@ class TestSearch(unittest.TestCase):
 
 
     def test_hybrid_search_threshold_filter(self):
+        """
+        Test that only search results with a score over a defined threshold are returned.
+        """
 
         # Create a fresh mock pipeline
-        mock_pipeline = create_mock_pipeline()
+        mock_pipeline = self.create_mock_pipeline()
         
         # Set up the Search instance
         hybrid_pipeline = RetrievalPipeline(
@@ -118,13 +117,41 @@ class TestSearch(unittest.TestCase):
         hybrid_pipeline_init = Search(hybrid_pipeline)
 
         # Mock the behaviour of the Search instance
-        mock_prediction = [{"content": "high score", "score": 0.9}, {"content": "low score", "score": 0.4}]
+        mock_prediction = [{"content": "high score", "score": 0.8}, {"content": "low score", "score": 0.4}]
         mock_prediction = [Document(content=doc["content"], score=doc["score"]) for doc in mock_prediction]
 
+        # Use a threshold where we expect 1 result
         threshold = 0.5
         when(hybrid_pipeline_init).hybrid_search(...).thenReturn([doc for doc in mock_prediction if doc.score > threshold])
-
         results = hybrid_pipeline_init.hybrid_search("test query", threshold=threshold)
 
         self.assertEqual(len(results), 1, f"Expected 1 result with score above 0.5 but got {len(results)}")
         self.assertEqual(results[0].content, "high score", f"Expected content 'high score', got {results[0].content}")
+
+        # Use a threshold where we expect 0 results
+        threshold = 0.9
+        when(hybrid_pipeline_init).hybrid_search(...).thenReturn([doc for doc in mock_prediction if doc.score > threshold])
+        results = hybrid_pipeline_init.hybrid_search("test query", threshold=threshold)
+
+        self.assertEqual(len(results), 0, f"Expected no results but got {len(results)}")
+
+
+    def test_hybrid_search_invalid_query(self):
+        """
+        Check nothing gets returned when an empty/invalid query is entered.
+        """
+
+        # Set up the Search instance
+        hybrid_pipeline_init = Search(Pipeline())
+
+        # Test with empty string
+        results = hybrid_pipeline_init.hybrid_search("")
+        self.assertEqual(len(results), 0, f"Expected 0 results but got {len(results)}")
+
+        # Test with blank spaces
+        results = hybrid_pipeline_init.hybrid_search("   ")
+        self.assertEqual(len(results), 0, f"Expected 0 results but got {len(results)}")
+
+        # Test with single character
+        results = hybrid_pipeline_init.hybrid_search("A")
+        self.assertEqual(len(results), 0, f"Expected 0 results but got {len(results)}")
