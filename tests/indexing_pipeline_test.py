@@ -8,7 +8,7 @@ from haystack_integrations.document_stores.opensearch import OpenSearchDocumentS
 from mockito import mock, when, verify, any
 from mockito.matchers import captor
 
-from search_backend.api.lib.indexing_pipeline import IndexingPipeline
+from search_backend.indexing_pipeline import IndexingPipeline
 
 
 class TestIndexingPipeline(unittest.TestCase):
