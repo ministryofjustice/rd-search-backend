@@ -248,7 +248,7 @@ class TestSearch(unittest.TestCase):
         when(retrieval_pipeline).run(...).thenReturn(None)
         results = Search(retrieval_pipeline).semantic_search("test query")
 
-        self.assertEqual(en(results), 0, f"Expected 0 results but got {len(results)}")
+        self.assertEqual(len(results), 0, f"Expected 0 results but got {len(results)}")
 
         # Try with something returned that isn't None
         when(retrieval_pipeline).run(...).thenReturn({'A': 1})
@@ -296,7 +296,7 @@ class TestSearch(unittest.TestCase):
 
         # Try with a correctly structured object
         mock_prediction = [{"content": "high score", "score": 0.8}, {"content": "low score", "score": 0.4}]
-        mock_prediction = {"ranker": {"documents": [Document(content=doc["content"], score=doc["score"]) for doc in mock_prediction]}}
+        mock_prediction = {"bm25_retriever": {"documents": [Document(content=doc["content"], score=doc["score"]) for doc in mock_prediction]}}
         when(retrieval_pipeline).run(...).thenReturn(mock_prediction)
         results = Search(retrieval_pipeline).bm25_search("test query")
 
