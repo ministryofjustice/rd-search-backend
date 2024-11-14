@@ -109,20 +109,27 @@ class TestSearch(unittest.TestCase):
 
         # Create a fresh mock pipeline
         mock_pipeline = self.create_mock_pipeline()
+
+        # Mock the behaviour of the Search instance
+        mock_prediction = [{"content": "high score", "score": 0.8}, {"content": "low score", "score": 0.4}]
+        mock_prediction = {"ranker": {"documents": [Document(content=doc["content"], score=doc["score"]) for doc in mock_prediction]}}
         
         # Set up the Search instance
         hybrid_pipeline = RetrievalPipeline(
             self.mock_document_store, self.dense_embedding_model, self.rerank_model, retrieval=mock_pipeline
         ).setup_hybrid_pipeline()
+        # when(hybrid_pipeline).run(any(list))
+        when(hybrid_pipeline).run(...).thenReturn(mock_prediction)
         hybrid_pipeline_init = Search(hybrid_pipeline)
 
-        # Mock the behaviour of the Search instance
-        mock_prediction = [{"content": "high score", "score": 0.8}, {"content": "low score", "score": 0.4}]
-        mock_prediction = [Document(content=doc["content"], score=doc["score"]) for doc in mock_prediction]
+        # Use a threshold where we expect 2 results
+        threshold = 0.1
+        results = hybrid_pipeline_init.hybrid_search("test query", threshold=threshold)
+
+        self.assertEqual(len(results), 2, f"Expected 2 results but got {len(results)}")
 
         # Use a threshold where we expect 1 result
-        threshold = 0.5
-        when(hybrid_pipeline_init).hybrid_search(...).thenReturn([doc for doc in mock_prediction if doc.score > threshold])
+        threshold = 0.4
         results = hybrid_pipeline_init.hybrid_search("test query", threshold=threshold)
 
         self.assertEqual(len(results), 1, f"Expected 1 result with score above 0.5 but got {len(results)}")
@@ -130,28 +137,35 @@ class TestSearch(unittest.TestCase):
 
         # Use a threshold where we expect 0 results
         threshold = 0.9
-        when(hybrid_pipeline_init).hybrid_search(...).thenReturn([doc for doc in mock_prediction if doc.score > threshold])
         results = hybrid_pipeline_init.hybrid_search("test query", threshold=threshold)
 
         self.assertEqual(len(results), 0, f"Expected no results but got {len(results)}")
 
 
-    def test_hybrid_search_invalid_query(self):
+    def test_search_invalid_query(self):
         """
         Check nothing gets returned when an empty/invalid query is entered.
         """
 
         # Set up the Search instance
-        hybrid_pipeline_init = Search(Pipeline())
+        pipeline_init = Search(Pipeline())
 
         # Test with empty string
-        results = hybrid_pipeline_init.hybrid_search("")
+        results = pipeline_init.hybrid_search("")
         self.assertEqual(len(results), 0, f"Expected 0 results but got {len(results)}")
 
         # Test with blank spaces
-        results = hybrid_pipeline_init.hybrid_search("   ")
+        results = pipeline_init.hybrid_search("   ")
         self.assertEqual(len(results), 0, f"Expected 0 results but got {len(results)}")
 
         # Test with single character
-        results = hybrid_pipeline_init.hybrid_search("A")
+        results = pipeline_init.hybrid_search("A")
+        self.assertEqual(len(results), 0, f"Expected 0 results but got {len(results)}")
+
+        # Test with semantic search method
+        results = pipeline_init.semantic_search("  ")
+        self.assertEqual(len(results), 0, f"Expected 0 results but got {len(results)}")
+
+        # Test with BM25 search method
+        results = pipeline_init.bm25_search("  ")
         self.assertEqual(len(results), 0, f"Expected 0 results but got {len(results)}")
