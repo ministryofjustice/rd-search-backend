@@ -12,7 +12,7 @@ from pdfminer.pdfinterp import PDFResourceManager, PDFPageInterpreter
 from pdfminer.pdfpage import PDFPage
 from pptx import Presentation
 
-from search_backend.api.lib.s3client import S3Client
+from search_backend.s3client import S3Client
 
 
 def _read_pdf_gen(f, title, fname):

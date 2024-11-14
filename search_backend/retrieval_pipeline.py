@@ -19,8 +19,13 @@ class RetrievalPipeline:
      - BM25
     """
 
-    def __init__(self, document_store: OpenSearchDocumentStore, dense_embedding_model: str = None,
-                 rerank_model: str = None):
+    def __init__(
+            self,
+            document_store: OpenSearchDocumentStore,
+            dense_embedding_model: str = None,
+            rerank_model: str = None,
+            retrieval: Pipeline = None,
+    ):
         """
         Args:
         :document_store: An Haystack/OpenSearch document store object, set up elsewhere.
@@ -28,9 +33,13 @@ class RetrievalPipeline:
             for a semantic/hybrid search. Leave blank if using a BM25 search.
         :rerank_model: Name of the reranker/cross-encoder model to use (assumes model is available from HuggingFace)
             for a semantic/hybrid search
+        :param retrieval: pipeline to do the retrieval, which will be configured in this constructor
         """
 
-        self.retrieval = Pipeline()
+        if retrieval is None:
+            retrieval = Pipeline()
+
+        self.retrieval = retrieval
         self.document_store = document_store
 
         self.bm25_retriever = OpenSearchBM25Retriever(

@@ -3,7 +3,7 @@ Functions to help clean up input queries and format the results.
 """
 
 import re
-from search_backend.api.lib.search import Search
+from search_backend.search import Search
 
 def clean_query(query):
     """

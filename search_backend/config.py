@@ -1,6 +1,5 @@
 import os
 
-from search_backend.api.lib.s3client import S3Client
 
 defaults = {
     # either specify AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY,
@@ -23,6 +22,7 @@ defaults = {
     "OPENSEARCH_URL": "http://localstack:4566",
     "QUERY_SERVICE": "hybrid",
 
+    # Optional arg for the OpenSearch docstore, to prevent trying to index everything in one go
     "index_batch_size": 10,
 
     # Select embedding model for the semantic search. This should be a sentence-similarity

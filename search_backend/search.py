@@ -25,6 +25,14 @@ class Search:
         self.pipeline = pipeline
 
 
+    def _basic_query_verification(self, search_query: str):
+        """
+        There's no point running the pipeline if there's no proper query. Make sure the query length
+        is greater than 1 character.
+        """
+        return len(search_query.strip()) <= 1
+
+
     def hybrid_search(self, search_query: str, filters: dict=None, top_k: int=10, threshold: float=0.):
         """
         Run a hybrid search pipeline and return results.
@@ -45,6 +53,9 @@ class Search:
 
         :return: A list of ranked search results.
         """
+
+        if self._basic_query_verification(search_query):
+            return []
 
         prediction = self.pipeline.run(
             {
@@ -89,6 +100,9 @@ class Search:
         :return: A list of ranked search results.
         """
 
+        if self._basic_query_verification(search_query):
+            return []
+
         print("Running search...")
         prediction = self.pipeline.run(
             {
@@ -131,10 +145,20 @@ class Search:
         :return: A list of ranked search results.
         """
 
+        if self._basic_query_verification(search_query):
+            return []
+
         prediction = self.pipeline.run(
             {
                 "bm25_retriever": {"query": search_query, "filters": filters, "top_k": top_k},
             }
         )
 
-        return prediction["bm25_retriever"]["documents"]
+        if "bm25_retriever" not in prediction:
+            return []
+        elif "documents" not in prediction["bm25_retriever"]:
+            return []
+        else:
+            results = prediction["bm25_retriever"]["documents"]
+
+        return results
