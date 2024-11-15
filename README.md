@@ -15,14 +15,17 @@ Install with `pip install git+ssh://git@github.com/ministryofjustice/rd-search-b
 
 ## Dev
 
-Working on the app relies on Python dependencies being installed locally. First set up a virtualenv and install
-dependencies:
+Working on the app relies on Python dependencies being installed locally.
+First set up a virtualenv and install dependencies:
 
 ```
 python3 -m venv venv
 source venv/bin/activate
 pip install -e '.[dev, search_backend]'
 ```
+
+Prior to pushing commits to GitHub, run the pre-commit hooks with:
+`pre-commit run --all-files`
 
 To build the package manifest with hatchling, run `hatchling build` from
 terminal at the project root. By default this writes to ./dist/, but can be
@@ -36,7 +39,8 @@ pytest tests
 
 ### Adding new dependencies
 
-If you need to add a new dependency, insert it into pyproject.toml. Set upper and lower bounds for the versions.
+If you need to add a new dependency, insert it into pyproject.toml. Set upper
+and lower bounds for the versions.
 
 ### Start the stack locally
 
@@ -49,13 +53,15 @@ The UI will then be available at http://localhost:8080/.
 
 ### Full health checks
 
-The frontend has a health-check endpoint which will test connectivity to the API. It is accessible locally at:
+The frontend has a health-check endpoint which will test connectivity to the
+API. It is accessible locally at:
 
 http://localhost:8080/health-check?full=true
 
 ### Preparing data
 
-Data should be converted into the following format to be compatible with the Haystack framework:
+Data should be converted into the following format to be compatible with the
+Haystack framework:
 
 ```
 document1 = {
@@ -92,4 +98,5 @@ docker compose build ; docker compose up
 AWS_URL_S3=http://0.0.0.0:4566 OPENSEARCH_URL=http://0.0.0.0:4566/opensearch/eu-west-2/rd-hr python scripts/process.py
 ```
 
-You should now be able to access the application at http://localhost:8080/ and perform a search.
+You should now be able to access the application at http://localhost:8080/ and
+perform a search.
