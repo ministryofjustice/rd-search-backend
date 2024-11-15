@@ -1,0 +1,43 @@
+repos:
+
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: 2c9f875913ee60ca25ce70243dc24d5b6415598c  # pragma: allowlist secret - v4.6.0
+    hooks:
+    -   id: trailing-whitespace
+    -   id: end-of-file-fixer
+    -   id: check-yaml
+    -   id: check-json
+    -   id: check-added-large-files
+        args: ['--maxkb=500']
+    -   id: detect-private-key
+    -   id: check-case-conflict
+    -   id: check-merge-conflict
+
+  - repo: https://github.com/PyCQA/flake8
+    rev: cf1542cefa3e766670b2066dd75c4571d682a649 # pragma: allowlist secret - v7.1.1
+    hooks:
+    -   id: flake8
+        name: flake8 - Python linting
+        args: [--max-line-length=79]
+
+  - repo: https://github.com/psf/black
+    rev: b965c2a5026f8ba399283ba3e01898b012853c79 # pragma: allowlist secret - v24.8.0
+    hooks:
+      - id: black
+        args: [--line-length=75]
+        name: black - Python linting (auto-fixes)
+        language_version: python
+
+  -   repo: https://github.com/Yelp/detect-secrets
+      rev: 01886c8a910c64595c47f186ca1ffc0b77fa5458 # pragma: allowlist secret - v1.5.0
+      hooks:
+      -   id: detect-secrets
+          exclude: .*ipynb # ignore false positive hashes in ipynb JSON
+  -   repo: https://github.com/kynan/nbstripout
+      rev: 3c241ca99c9ad788e1b1d0a7bc858d9af83a9976 # pragma: allowlist secret - v0.7.1
+      hooks:
+      -   id: nbstripout
+          name: nbstripout - Strip outputs from notebooks (auto-fixes)
+          args:
+          -   --extra-keys
+          -   "metadata.colab metadata.kernelspec cell.metadata.colab cell.metadata.executionInfo cell.metadata.id cell.metadata.outputId"
