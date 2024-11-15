@@ -19,6 +19,7 @@ repos:
     -   id: flake8
         name: flake8 - Python linting
         args: [--max-line-length=79]
+        exclude: .*ipynb
 
   - repo: https://github.com/psf/black
     rev: b965c2a5026f8ba399283ba3e01898b012853c79 # pragma: allowlist secret - v24.8.0
@@ -27,6 +28,7 @@ repos:
         args: [--line-length=75]
         name: black - Python linting (auto-fixes)
         language_version: python
+        exclude: .*ipynb
 
   -   repo: https://github.com/Yelp/detect-secrets
       rev: 01886c8a910c64595c47f186ca1ffc0b77fa5458 # pragma: allowlist secret - v1.5.0

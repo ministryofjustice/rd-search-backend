@@ -4,6 +4,7 @@ Upload a set of documents from a zip file to the local S3 bucket.
 Example of usage:
 > python upload_zip_to_s3.py 'test_zip.zip' 'unzip_folder' --bucket mojap-rd --prefix test_upload/docs --no-local
 """
+
 import argparse
 import os
 import zipfile
@@ -16,9 +17,21 @@ import boto3
 parser = argparse.ArgumentParser(prog="Document uploader")
 parser.add_argument("zipfile", help="Path to zip file")
 parser.add_argument("destdir", help="Destination directory to unzip to")
-parser.add_argument("--bucket", help="S3 bucket to upload files to", default="mojap-rd")
-parser.add_argument("--prefix", help="Prefix to put in front of S3 keys for each uploaded file", default="demo_folder")
-parser.add_argument('--local', action=argparse.BooleanOptionalAction, dest='local', help="Use --local for localstack, or --no-local for an s3 bucket on the MoJ Analytical Platform", default=False)
+parser.add_argument(
+    "--bucket", help="S3 bucket to upload files to", default="mojap-rd"
+)
+parser.add_argument(
+    "--prefix",
+    help="Prefix to put in front of S3 keys for each uploaded file",
+    default="demo_folder",
+)
+parser.add_argument(
+    "--local",
+    action=argparse.BooleanOptionalAction,
+    dest="local",
+    help="Use --local for localstack, or --no-local for an s3 bucket on the MoJ Analytical Platform",
+    default=False,
+)
 
 args = parser.parse_args()
 
@@ -39,8 +52,8 @@ if args.local:
     s3 = boto3.client(
         "s3",
         endpoint_url="http://localhost:4566",
-        aws_access_key_id="localstack",
-        aws_secret_access_key="localstack"
+        aws_access_key_id="localstack",  # pragma: allowlist-secret
+        aws_secret_access_key="localstack",  # pragma: allowlist-secret
     )
 else:
     s3 = boto3.client("s3")
