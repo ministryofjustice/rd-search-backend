@@ -47,6 +47,7 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = [
+    "coverage==7.6.4",
     "pip-tools",
     "ipykernel==6.29.5",
     "openpyxl==3.1.5",
@@ -54,6 +55,7 @@ dev = [
     "hatchling",
     "mockito>=1.5.1, <2",
     "pytest>=8.3.3, <9",
+    "pre-commit==4.0.0",
 ]
 data_read = [
     "boto3",
