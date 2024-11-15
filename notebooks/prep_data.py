@@ -2,13 +2,17 @@
 Prepare data from a json file to use to try out Haystack functions.
 """
 
+
 def replace_newlines(project_list: list[dict[str, any]]):
     """
     Replace newlines as they interfere with the matching
     """
 
     project_list = [
-        {k : v.replace('\n', ' ') if isinstance(v, str) else v for k, v in project.items()}
+        {
+            k: v.replace("\n", " ") if isinstance(v, str) else v
+            for k, v in project.items()
+        }
         for project in project_list
     ]
 
@@ -37,14 +41,14 @@ def format_doc_dict(doc: dict, field: str):
     else:
         meta = doc.copy()
 
-        meta['db_id'] = f"{meta['id']}"
-        meta.pop('id')
+        meta["db_id"] = f"{meta['id']}"
+        meta.pop("id")
 
-        meta['matched_field'] = field
+        meta["matched_field"] = field
 
         doc_dict = {
-            'meta': meta,
-            'content': content,
+            "meta": meta,
+            "content": content,
         }
 
         return doc_dict
@@ -65,15 +69,17 @@ def prep_project_data(project_list: list[dict[str, any]]):
 
     # If the data contains multiple fields we'd want to search over, list them here
     fields_to_search = [
-        'name',
-        'description',
-        'reasons_for_use',
-        'problems_solved',
-        'metrics'
+        "name",
+        "description",
+        "reasons_for_use",
+        "problems_solved",
+        "metrics",
     ]
 
     dataset = [
-        y for project in project_list for field in fields_to_search
+        y
+        for project in project_list
+        for field in fields_to_search
         if (y := format_doc_dict(project, field)) is not None
     ]
 

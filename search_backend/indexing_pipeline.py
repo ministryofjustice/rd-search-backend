@@ -4,8 +4,12 @@ from haystack import Pipeline, Document
 from haystack.components.preprocessors import DocumentSplitter
 from haystack.components.writers import DocumentWriter
 from haystack.document_stores.types import DuplicatePolicy
-from haystack_integrations.components.embedders.fastembed import FastembedDocumentEmbedder
-from haystack_integrations.document_stores.opensearch import OpenSearchDocumentStore
+from haystack_integrations.components.embedders.fastembed import (
+    FastembedDocumentEmbedder,
+)
+from haystack_integrations.document_stores.opensearch import (
+    OpenSearchDocumentStore,
+)
 
 
 class IndexingPipeline:
@@ -14,14 +18,14 @@ class IndexingPipeline:
     """
 
     def __init__(
-            self,
-            document_store: OpenSearchDocumentStore,
-            dense_embedding_model: str,
-            semantic: bool = False,
-            indexing: Pipeline = None,
-            split_length: int = 64,
-            split_overlap: int = 8,
-            split_threshold: int = 0
+        self,
+        document_store: OpenSearchDocumentStore,
+        dense_embedding_model: str,
+        semantic: bool = False,
+        indexing: Pipeline = None,
+        split_length: int = 64,
+        split_overlap: int = 8,
+        split_threshold: int = 0,
     ):
         """
         :param document_store: DocumentStore object that has been set up elsewhere
@@ -47,7 +51,10 @@ class IndexingPipeline:
 
         indexing.add_component(
             "document_writer",
-            DocumentWriter(document_store=self.document_store, policy=DuplicatePolicy.OVERWRITE),
+            DocumentWriter(
+                document_store=self.document_store,
+                policy=DuplicatePolicy.OVERWRITE,
+            ),
         )
 
         if semantic:
@@ -69,7 +76,9 @@ class IndexingPipeline:
 
         :param docs: Haystack Document objects to be indexed.
         """
-        return self.indexing.run({"document_splitter": {"documents": docs}})
+        return self.indexing.run(
+            {"document_splitter": {"documents": docs}}
+        )
 
     def delete_docs(self, document_ids: list[Any], id_metafield: str):
         """

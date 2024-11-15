@@ -1,7 +1,13 @@
 from urllib.parse import urlparse
 
-from haystack_integrations.document_stores.opensearch import OpenSearchDocumentStore
-from opensearchpy import OpenSearch, Urllib3HttpConnection, Urllib3AWSV4SignerAuth
+from haystack_integrations.document_stores.opensearch import (
+    OpenSearchDocumentStore,
+)
+from opensearchpy import (
+    OpenSearch,
+    Urllib3HttpConnection,
+    Urllib3AWSV4SignerAuth,
+)
 
 from search_backend.config import get_config
 from search_backend.aws import get_aws_session
@@ -41,7 +47,7 @@ def document_store_factory(cfg, create_index=False):
     auth = Urllib3AWSV4SignerAuth(credentials, cfg["AWS_REGION"], "es")
     url = cfg["OPENSEARCH_URL"]
     use_ssl = urlparse(url).scheme == "https"
-    embedding_dim = cfg["embedding_dim"],
+    embedding_dim = (cfg["embedding_dim"],)
     batch_size = cfg["index_batch_size"]
 
     # OpenSearch document store
@@ -56,12 +62,16 @@ def document_store_factory(cfg, create_index=False):
         "batch_size": batch_size,
     }
 
-    return OpenSearchDocumentStore(create_index=create_index, **opensearch_docstore_options)
+    return OpenSearchDocumentStore(
+        create_index=create_index, **opensearch_docstore_options
+    )
 
 
 SERVICES = {
     "s3clientfactory": s3client_factory,
     "opensearchclientfactory": opensearch_client_factory,
     "documentstorefactory": document_store_factory,
-    "querydocumentstore": document_store_factory(get_config(), create_index=False),
+    "querydocumentstore": document_store_factory(
+        get_config(), create_index=False
+    ),
 }

@@ -85,4 +85,3 @@ doctest_optionflags = "NORMALIZE_WHITESPACE"
 testpaths = [
     "./tests"
 ]
-

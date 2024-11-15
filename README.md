@@ -15,7 +15,7 @@ Install with `pip install git+ssh://git@github.com/ministryofjustice/rd-search-b
 
 ## Dev
 
-Working on the app relies on Python dependencies being installed locally. First set up a virtualenv and install 
+Working on the app relies on Python dependencies being installed locally. First set up a virtualenv and install
 dependencies:
 
 ```
@@ -93,4 +93,3 @@ AWS_URL_S3=http://0.0.0.0:4566 OPENSEARCH_URL=http://0.0.0.0:4566/opensearch/eu-
 ```
 
 You should now be able to access the application at http://localhost:8080/ and perform a search.
-
