@@ -86,9 +86,7 @@ class TestIndexingPipeline(unittest.TestCase):
         )
 
     def test_delete_docs_method(self):
-        pipeline = IndexingPipeline(
-            self.mock_document_store, "dense_model"
-        )
+        pipeline = IndexingPipeline(self.mock_document_store, "dense_model")
         doc_ids = ["1", "2"]
         id_metafield = "custom_id"
 

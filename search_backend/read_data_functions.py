@@ -64,9 +64,7 @@ def _read_pdf_gen(f, title, fname):
             continue
         if body is None:
             continue
-        elif bool(re.search("^contents", body.lower())) & (
-            pageNumber <= 5
-        ):
+        elif bool(re.search("^contents", body.lower())) & (pageNumber <= 5):
             # Skip contents pages
             continue
         elif (pageNumber == 0) & (len(body.split(" ")) <= 8):
@@ -171,11 +169,7 @@ def _read_ppt_gen(f, title, fname):
             if shape.has_table:
                 for row in shape.table.rows:
                     table_text = " ".join(
-                        [
-                            cell.text
-                            for cell in row.cells
-                            if cell.text != ""
-                        ]
+                        [cell.text for cell in row.cells if cell.text != ""]
                     )
                     if table_text != "":
                         slide_text.append(table_text)
@@ -233,15 +227,11 @@ def read_docs(s3client: S3Client, fnames: list[str]):
 
         with BytesIO(fs) as f:
             if re.search(".pdf$", fname):
-                doc_list = [
-                    page for page in _read_pdf_gen(f, title, fname)
-                ]
+                doc_list = [page for page in _read_pdf_gen(f, title, fname)]
             elif re.search(".doc$|.docx$", fname):
                 doc_list = [_read_word(f, title, fname)]
             elif re.search(".ppt$|.pptx$", fname):
-                doc_list = [
-                    para for para in _read_ppt_gen(f, title, fname)
-                ]
+                doc_list = [para for para in _read_ppt_gen(f, title, fname)]
             else:
                 print(f"File format not accepted for {fname}")
 

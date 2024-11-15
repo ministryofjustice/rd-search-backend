@@ -76,9 +76,7 @@ class IndexingPipeline:
 
         :param docs: Haystack Document objects to be indexed.
         """
-        return self.indexing.run(
-            {"document_splitter": {"documents": docs}}
-        )
+        return self.indexing.run({"document_splitter": {"documents": docs}})
 
     def delete_docs(self, document_ids: list[Any], id_metafield: str):
         """

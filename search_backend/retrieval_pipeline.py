@@ -83,9 +83,7 @@ class RetrievalPipeline:
         hybrid_retrieval.add_component(
             "dense_text_embedder", self.dense_text_embedder
         )
-        hybrid_retrieval.add_component(
-            "bm25_retriever", self.bm25_retriever
-        )
+        hybrid_retrieval.add_component("bm25_retriever", self.bm25_retriever)
         hybrid_retrieval.add_component(
             "embedding_retriever", self.embedding_retriever
         )

@@ -12,9 +12,7 @@ class TestSearch(unittest.TestCase):
 
     def setUp(self):
         self.mock_document_store = mock(OpenSearchDocumentStore)
-        self.dense_embedding_model = (
-            "sentence-transformers/all-MiniLM-L6-v2"
-        )
+        self.dense_embedding_model = "sentence-transformers/all-MiniLM-L6-v2"
         self.rerank_model = "cross-encoder/ms-marco-MiniLM-L-2-v2"
 
     def create_mock_pipeline(self):

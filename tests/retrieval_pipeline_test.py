@@ -21,9 +21,7 @@ from search_backend.retrieval_pipeline import RetrievalPipeline
 class TestRetrievalPipeline(unittest.TestCase):
     def setUp(self):
         self.mock_document_store = mock(OpenSearchDocumentStore)
-        self.dense_embedding_model = (
-            "sentence-transformers/all-MiniLM-L6-v2"
-        )
+        self.dense_embedding_model = "sentence-transformers/all-MiniLM-L6-v2"
         self.rerank_model = "cross-encoder/ms-marco-MiniLM-L-2-v2"
 
     def test_setup_hybrid_pipeline(self):
@@ -62,9 +60,7 @@ class TestRetrievalPipeline(unittest.TestCase):
             "embedding_retriever.query_embedding",
         )
         verify(mock_pipeline).connect("bm25_retriever", "document_joiner")
-        verify(mock_pipeline).connect(
-            "embedding_retriever", "document_joiner"
-        )
+        verify(mock_pipeline).connect("embedding_retriever", "document_joiner")
         verify(mock_pipeline).connect("document_joiner", "ranker")
 
     def test_setup_semantic_pipeline(self):

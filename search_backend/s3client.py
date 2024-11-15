@@ -24,9 +24,7 @@ class S3Client:
         boto3.set_stream_logger("", logging.INFO)
 
     # returns None (no error), or error message
-    def upload(
-        self, bytes_to_upload: bytes, filename: str
-    ) -> Optional[str]:
+    def upload(self, bytes_to_upload: bytes, filename: str) -> Optional[str]:
         try:
             self.client.upload_fileobj(
                 BytesIO(bytes_to_upload),
