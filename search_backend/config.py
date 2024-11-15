@@ -27,7 +27,7 @@ defaults = {
 
     # Select embedding model for the semantic search. This should be a sentence-similarity
     # model available on Huggingface: https://huggingface.co/models?pipeline_tag=sentence-similarity
-    "dense_embedding_model": "snowflake/snowflake-arctic-embed-xs",
+    "dense_embedding_model": "sentence-transformers/all-MiniLM-L6-v2",
     # The value of the embedding dimension must match that specified for the model defined above
     "embedding_dim": 384,
 

@@ -166,3 +166,6 @@ cython_debug/
 
 DocumentStore/
 embedding_cache/
+*.json
+*.csv
+*.xlsx

@@ -78,3 +78,14 @@ class TestRetrievalPipeline(unittest.TestCase):
 
         verify(mock_pipeline).add_component("bm25_retriever", any(OpenSearchBM25Retriever))
 
+    def test_setup_no_input_pipeline(self):
+        """
+        Test that the Pipeline object gets set up if not provided as an arg.
+        """
+
+        pipeline = RetrievalPipeline(self.mock_document_store)
+
+        self.assertEqual(
+            type(pipeline.retrieval), Pipeline, f"Expected Pipeline object but got {type(pipeline.retrieval)}"
+        )
+

@@ -66,18 +66,21 @@ class Search:
             }
         )
 
-        if "ranker" not in prediction:
+        # Return an empty list if an unexpected object is returned by the pipeline
+        if prediction is None:
+            return []
+        elif "ranker" not in prediction:
             return []
         elif "documents" not in prediction["ranker"]:
             return []
         else:
-            docs = prediction["ranker"]["documents"]
+            results = prediction["ranker"]["documents"]
 
         # Filter by threshold score
         if threshold > 0:
-            docs = [doc for doc in docs if doc.score > threshold]
+            results = [result for result in results if result.score > threshold]
 
-        return docs
+        return results
 
     def semantic_search(self, search_query: str, filters: dict=None, top_k: int=10, threshold: float=0.):
         """
@@ -112,7 +115,10 @@ class Search:
             }
         )
 
-        if "ranker" not in prediction:
+        # Return an empty list if an unexpected object is returned by the pipeline
+        if prediction is None:
+            return []
+        elif "ranker" not in prediction:
             return []
         elif "documents" not in prediction["ranker"]:
             return []
@@ -154,7 +160,10 @@ class Search:
             }
         )
 
-        if "bm25_retriever" not in prediction:
+        # Return an empty list if an unexpected object is returned by the pipeline
+        if prediction is None:
+            return []
+        elif "bm25_retriever" not in prediction:
             return []
         elif "documents" not in prediction["bm25_retriever"]:
             return []
