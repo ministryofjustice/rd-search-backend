@@ -69,7 +69,7 @@ class Search:
         # Return an empty list if an unexpected object is returned by the pipeline
         if prediction is None:
             return []
-        if "ranker" not in prediction:
+        elif "ranker" not in prediction:
             return []
         elif "documents" not in prediction["ranker"]:
             return []
@@ -163,7 +163,7 @@ class Search:
         # Return an empty list if an unexpected object is returned by the pipeline
         if prediction is None:
             return []
-        if "bm25_retriever" not in prediction:
+        elif "bm25_retriever" not in prediction:
             return []
         elif "documents" not in prediction["bm25_retriever"]:
             return []

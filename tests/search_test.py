@@ -110,7 +110,7 @@ class TestSearch(unittest.TestCase):
         # Create a fresh mock pipeline
         mock_pipeline = self.create_mock_pipeline()
 
-        # Mock the behaviour of the Search instance
+        # Mock the search results
         mock_prediction = [{"content": "high score", "score": 0.8}, {"content": "low score", "score": 0.4}]
         mock_prediction = {"ranker": {"documents": [Document(content=doc["content"], score=doc["score"]) for doc in mock_prediction]}}
         
@@ -151,7 +151,7 @@ class TestSearch(unittest.TestCase):
         # Create a fresh mock pipeline
         mock_pipeline = self.create_mock_pipeline()
 
-        # Mock the behaviour of the Search instance
+        # Mock the search results
         mock_prediction = [{"content": "high score", "score": 0.8}, {"content": "low score", "score": 0.4}]
         mock_prediction = {"ranker": {"documents": [Document(content=doc["content"], score=doc["score"]) for doc in mock_prediction]}}
         
