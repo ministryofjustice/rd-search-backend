@@ -1,5 +1,6 @@
 <!--- Badges start --->
 [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg)](code_of_conduct.md)
+[![codecov](https://codecov.io/github/ministryofjustice/rd-search-backend/graph/badge.svg?token=4UC7ESQEP2)](https://codecov.io/github/ministryofjustice/rd-search-backend)
 <!--- Badges End --->
 
 # rd-search-backend
