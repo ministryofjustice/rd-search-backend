@@ -1,5 +1,5 @@
 name: Test Package
-on: [pull_request]
+on: [push]
 jobs:
   test:
     runs-on: ubuntu-24.04 # pin to avoid breaking changes when runner images update latest
