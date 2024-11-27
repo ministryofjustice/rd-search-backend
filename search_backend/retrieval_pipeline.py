@@ -6,9 +6,16 @@ import os
 from haystack import Pipeline
 from haystack.components.joiners import DocumentJoiner
 from haystack.components.rankers import TransformersSimilarityRanker
-from haystack_integrations.components.embedders.fastembed import FastembedTextEmbedder
-from haystack_integrations.components.retrievers.opensearch import OpenSearchBM25Retriever, OpenSearchEmbeddingRetriever
-from haystack_integrations.document_stores.opensearch import OpenSearchDocumentStore
+from haystack_integrations.components.embedders.fastembed import (
+    FastembedTextEmbedder,
+)
+from haystack_integrations.components.retrievers.opensearch import (
+    OpenSearchBM25Retriever,
+    OpenSearchEmbeddingRetriever,
+)
+from haystack_integrations.document_stores.opensearch import (
+    OpenSearchDocumentStore,
+)
 
 
 class RetrievalPipeline:
@@ -20,11 +27,11 @@ class RetrievalPipeline:
     """
 
     def __init__(
-            self,
-            document_store: OpenSearchDocumentStore,
-            dense_embedding_model: str = None,
-            rerank_model: str = None,
-            retrieval: Pipeline = None,
+        self,
+        document_store: OpenSearchDocumentStore,
+        dense_embedding_model: str = None,
+        rerank_model: str = None,
+        retrieval: Pipeline = None,
     ):
         """
         Args:
@@ -47,7 +54,9 @@ class RetrievalPipeline:
             scale_score=True,
             fuzziness="AUTO",
         )
-        self.embedding_retriever = OpenSearchEmbeddingRetriever(document_store=self.document_store)
+        self.embedding_retriever = OpenSearchEmbeddingRetriever(
+            document_store=self.document_store
+        )
 
         if dense_embedding_model is not None:
             self.dense_text_embedder = FastembedTextEmbedder(
@@ -71,14 +80,24 @@ class RetrievalPipeline:
 
         hybrid_retrieval = self.retrieval
 
-        hybrid_retrieval.add_component("dense_text_embedder", self.dense_text_embedder)
+        hybrid_retrieval.add_component(
+            "dense_text_embedder", self.dense_text_embedder
+        )
         hybrid_retrieval.add_component("bm25_retriever", self.bm25_retriever)
-        hybrid_retrieval.add_component("embedding_retriever", self.embedding_retriever)
-        hybrid_retrieval.add_component("document_joiner", DocumentJoiner(join_mode="reciprocal_rank_fusion"))
-        hybrid_retrieval.add_component("ranker", TransformersSimilarityRanker(model=self.rerank_model))
+        hybrid_retrieval.add_component(
+            "embedding_retriever", self.embedding_retriever
+        )
+        hybrid_retrieval.add_component(
+            "document_joiner",
+            DocumentJoiner(join_mode="reciprocal_rank_fusion"),
+        )
+        hybrid_retrieval.add_component(
+            "ranker", TransformersSimilarityRanker(model=self.rerank_model)
+        )
 
         hybrid_retrieval.connect(
-            "dense_text_embedder.embedding", "embedding_retriever.query_embedding"
+            "dense_text_embedder.embedding",
+            "embedding_retriever.query_embedding",
         )
         hybrid_retrieval.connect("bm25_retriever", "document_joiner")
         hybrid_retrieval.connect("embedding_retriever", "document_joiner")
@@ -95,12 +114,19 @@ class RetrievalPipeline:
 
         retrieval = self.retrieval
 
-        retrieval.add_component("dense_text_embedder", self.dense_text_embedder)
-        retrieval.add_component("embedding_retriever", self.embedding_retriever)
-        retrieval.add_component("ranker", TransformersSimilarityRanker(model=self.rerank_model))
+        retrieval.add_component(
+            "dense_text_embedder", self.dense_text_embedder
+        )
+        retrieval.add_component(
+            "embedding_retriever", self.embedding_retriever
+        )
+        retrieval.add_component(
+            "ranker", TransformersSimilarityRanker(model=self.rerank_model)
+        )
 
         retrieval.connect(
-            "dense_text_embedder.embedding", "embedding_retriever.query_embedding"
+            "dense_text_embedder.embedding",
+            "embedding_retriever.query_embedding",
         )
         retrieval.connect("embedding_retriever", "ranker")
 

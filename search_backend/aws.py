@@ -20,7 +20,7 @@ def get_aws_session(env: dict, aws_region: str) -> boto3.Session:
     aws_role_arn = env.get("AWS_ROLE_ARN")
 
     if aws_web_identity_token_file is not None and aws_role_arn is not None:
-        with open(env["AWS_WEB_IDENTITY_TOKEN_FILE"], 'r') as content_file:
+        with open(env["AWS_WEB_IDENTITY_TOKEN_FILE"], "r") as content_file:
             web_identity_token = content_file.read()
 
             role = boto3.client("sts").assume_role_with_web_identity(

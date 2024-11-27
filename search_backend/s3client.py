@@ -21,7 +21,7 @@ class S3Client:
         self.bucket = s3bucket
         self.prefix = prefix.strip("/")
         self.client = client
-        boto3.set_stream_logger('', logging.INFO)
+        boto3.set_stream_logger("", logging.INFO)
 
     # returns None (no error), or error message
     def upload(self, bytes_to_upload: bytes, filename: str) -> Optional[str]:
@@ -29,7 +29,7 @@ class S3Client:
             self.client.upload_fileobj(
                 BytesIO(bytes_to_upload),
                 self.bucket,
-                f"{self.prefix}/{os.path.basename(filename)}"
+                f"{self.prefix}/{os.path.basename(filename)}",
             )
 
             return None
@@ -55,7 +55,9 @@ class S3Client:
     # and list is empty
     def list(self) -> tuple:
         try:
-            response = self.client.list_objects_v2(Bucket=self.bucket, Prefix=f"{self.prefix}/")
+            response = self.client.list_objects_v2(
+                Bucket=self.bucket, Prefix=f"{self.prefix}/"
+            )
 
             objs = []
             if "Contents" in response:

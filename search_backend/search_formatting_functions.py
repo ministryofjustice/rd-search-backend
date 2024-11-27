@@ -5,6 +5,7 @@ Functions to help clean up input queries and format the results.
 import re
 from search_backend.search import Search
 
+
 def clean_query(query):
     """
     Performs cleaning on an input string to remove characters that aren't
@@ -12,18 +13,18 @@ def clean_query(query):
     """
 
     # Replace ampersands
-    query = re.sub(r'\&', 'and', query)
+    query = re.sub(r"\&", "and", query)
     # Remove some punctuation marks
     query = re.sub(r"[^A-Za-z0-9\s\-\.\?\'\,\"]+", "", query)
     # Remove newlines
-    query = re.sub(r'\n', ' ', query)
+    query = re.sub(r"\n", " ", query)
     # Replace multiple spaces with a single space
-    query = re.sub(r'[\s\s]+', ' ', query)
-    query = re.sub(r'[\.\.]+', '.', query)
-    query = re.sub(r'[\,\,]+', ',', query)
-    query = re.sub(r'[\?\?]+', '?', query)
+    query = re.sub(r"[\s\s]+", " ", query)
+    query = re.sub(r"[\.\.]+", ".", query)
+    query = re.sub(r"[\,\,]+", ",", query)
+    query = re.sub(r"[\?\?]+", "?", query)
     query = re.sub(r"[\'\']+", "'", query)
-    query = re.sub(r'[\"\"]+', '"', query)
+    query = re.sub(r"[\"\"]+", '"', query)
     # Trim any whitespace introduced by removing punctuation
     query = query.strip()
 
@@ -43,7 +44,9 @@ def detect_bad_query(query):
         return True
 
     unusual_spacing = re.match(
-        r"[A-Za-z][\s\-\.\?\'\,][A-Za-z][\s\-\.\?\'\,][A-Za-z][\s\-\.\?\'\,][A-Za-z][\s\-\.\?\'\,]", query)
+        r"[A-Za-z][\s\-\.\?\'\,][A-Za-z][\s\-\.\?\'\,][A-Za-z][\s\-\.\?\'\,][A-Za-z][\s\-\.\?\'\,]",
+        query,
+    )
     if unusual_spacing:
         print("Invalid query. Please reduce spacing.")
         return True
@@ -61,13 +64,15 @@ def pretty_print_results(prediction):
     """
 
     for doc in prediction:
-        print('-----------------------------------')
+        print("-----------------------------------")
         print(f'{doc.meta["title"]} - Score: {doc.score}')
         print(doc.content)
         print("\n")
 
 
-def formatted_search_results(search_query: str, pipe, filters=None, top_k: int=5):
+def formatted_search_results(
+    search_query: str, pipe, filters=None, top_k: int = 5
+):
     """
     Format hybrid search results
     """
@@ -79,16 +84,17 @@ def formatted_search_results(search_query: str, pipe, filters=None, top_k: int=5
     if detect_bad_query(cleaned_query):
         answer = {
             "answer": "Invalid query. Please try again.",
-            "sources": []
+            "sources": [],
         }
     else:
         # This only runs if the query has passed a validation check
         search_init = Search(pipe)
-        results = search_init.hybrid_search(search_query, filters=filters, top_k=top_k)
-
+        results = search_init.hybrid_search(
+            search_query, filters=filters, top_k=top_k
+        )
 
         docs = []
-        for doc in results["ranker"]['documents']:
+        for doc in results["ranker"]["documents"]:
             doc_info = {
                 "title": doc.meta["title"],
                 "score": doc.score,

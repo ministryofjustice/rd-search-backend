@@ -4,6 +4,7 @@ Functions to run searches based on Haystack pipelines and print the results.
 
 from haystack import Pipeline
 
+
 class Search:
     """
     Run different types of search, based on an existing pipeline:
@@ -24,7 +25,6 @@ class Search:
 
         self.pipeline = pipeline
 
-
     def _basic_query_verification(self, search_query: str):
         """
         There's no point running the pipeline if there's no proper query. Make sure the query length
@@ -32,8 +32,13 @@ class Search:
         """
         return len(search_query.strip()) <= 1
 
-
-    def hybrid_search(self, search_query: str, filters: dict=None, top_k: int=10, threshold: float=0.):
+    def hybrid_search(
+        self,
+        search_query: str,
+        filters: dict = None,
+        top_k: int = 10,
+        threshold: float = 0.0,
+    ):
         """
         Run a hybrid search pipeline and return results.
 
@@ -60,8 +65,15 @@ class Search:
         prediction = self.pipeline.run(
             {
                 "dense_text_embedder": {"text": search_query},
-                "bm25_retriever": {"query": search_query, "filters": filters, "top_k": top_k},
-                "embedding_retriever": {"filters": filters, "top_k": top_k},
+                "bm25_retriever": {
+                    "query": search_query,
+                    "filters": filters,
+                    "top_k": top_k,
+                },
+                "embedding_retriever": {
+                    "filters": filters,
+                    "top_k": top_k,
+                },
                 "ranker": {"query": search_query, "top_k": top_k},
             }
         )
@@ -78,11 +90,19 @@ class Search:
 
         # Filter by threshold score
         if threshold > 0:
-            results = [result for result in results if result.score > threshold]
+            results = [
+                result for result in results if result.score > threshold
+            ]
 
         return results
 
-    def semantic_search(self, search_query: str, filters: dict=None, top_k: int=10, threshold: float=0.):
+    def semantic_search(
+        self,
+        search_query: str,
+        filters: dict = None,
+        top_k: int = 10,
+        threshold: float = 0.0,
+    ):
         """
         Run a semantic search pipeline and return results.
 
@@ -110,7 +130,10 @@ class Search:
         prediction = self.pipeline.run(
             {
                 "dense_text_embedder": {"text": search_query},
-                "embedding_retriever": {"filters": filters, "top_k": top_k},
+                "embedding_retriever": {
+                    "filters": filters,
+                    "top_k": top_k,
+                },
                 "ranker": {"query": search_query, "top_k": top_k},
             }
         )
@@ -127,11 +150,15 @@ class Search:
 
         # Filter by threshold score
         if threshold > 0:
-            results = [result for result in results if result.score > threshold]
+            results = [
+                result for result in results if result.score > threshold
+            ]
 
         return results
 
-    def bm25_search(self, search_query: str, filters: dict=None, top_k: int=100):
+    def bm25_search(
+        self, search_query: str, filters: dict = None, top_k: int = 100
+    ):
         """
         Run a BM25 search pipeline and return results.
 
@@ -156,7 +183,11 @@ class Search:
 
         prediction = self.pipeline.run(
             {
-                "bm25_retriever": {"query": search_query, "filters": filters, "top_k": top_k},
+                "bm25_retriever": {
+                    "query": search_query,
+                    "filters": filters,
+                    "top_k": top_k,
+                },
             }
         )
 
