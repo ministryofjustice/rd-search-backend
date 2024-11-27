@@ -47,7 +47,7 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = [
-    "coverage==7.6.4",
+    "coverage==7.6.8",
     "pip-tools",
     "ipykernel==6.29.5",
     "openpyxl==3.1.5",
