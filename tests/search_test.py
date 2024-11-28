@@ -169,7 +169,7 @@ class TestSearch(unittest.TestCase):
         ).setup_hybrid_pipeline()
 
         # Mock the part where the retrieval pipeline is run
-        when(hybrid_pipeline).run(...).thenReturn(mock_prediction)
+        when(mock_pipeline).run(...).thenReturn(mock_prediction)
         hybrid_pipeline_init = Search(hybrid_pipeline)
 
         # Use a threshold where we expect 2 results
@@ -240,7 +240,7 @@ class TestSearch(unittest.TestCase):
         ).setup_semantic_pipeline()
 
         # Mock the part where the retrieval pipeline is run
-        when(semantic_pipeline).run(...).thenReturn(mock_prediction)
+        when(mock_pipeline).run(...).thenReturn(mock_prediction)
         semantic_pipeline_init = Search(semantic_pipeline)
 
         # Use a threshold where we expect 1 result
@@ -315,7 +315,7 @@ class TestSearch(unittest.TestCase):
         ).setup_hybrid_pipeline()
 
         # Mock the part where the retrieval pipeline is run and return something unexpected (None)
-        when(retrieval_pipeline).run(...).thenReturn(None)
+        when(mock_pipeline).run(...).thenReturn(None)
         results = Search(retrieval_pipeline).hybrid_search("test query")
 
         self.assertEqual(
@@ -323,11 +323,11 @@ class TestSearch(unittest.TestCase):
         )
 
         # Try with something returned that isn't None
-        when(retrieval_pipeline).run(...).thenReturn({"A": 1})
+        when(mock_pipeline).run(...).thenReturn({"A": 1})
         results = Search(retrieval_pipeline).hybrid_search("test query")
 
         # Try with something that's only partially structured correctly
-        when(retrieval_pipeline).run(...).thenReturn({"ranker": {"A": 1}})
+        when(mock_pipeline).run(...).thenReturn({"ranker": {"A": 1}})
         results = Search(retrieval_pipeline).hybrid_search("test query")
 
         self.assertEqual(
@@ -351,7 +351,7 @@ class TestSearch(unittest.TestCase):
         ).setup_semantic_pipeline()
 
         # Mock the part where the retrieval pipeline is run and return something unexpected (None)
-        when(retrieval_pipeline).run(...).thenReturn(None)
+        when(mock_pipeline).run(...).thenReturn(None)
         results = Search(retrieval_pipeline).semantic_search("test query")
 
         self.assertEqual(
@@ -359,7 +359,7 @@ class TestSearch(unittest.TestCase):
         )
 
         # Try with something returned that isn't None
-        when(retrieval_pipeline).run(...).thenReturn({"A": 1})
+        when(mock_pipeline).run(...).thenReturn({"A": 1})
         results = Search(retrieval_pipeline).semantic_search("test query")
 
         self.assertEqual(
@@ -367,7 +367,7 @@ class TestSearch(unittest.TestCase):
         )
 
         # Try with something that's only partially structured correctly
-        when(retrieval_pipeline).run(...).thenReturn({"ranker": {"A": 1}})
+        when(mock_pipeline).run(...).thenReturn({"ranker": {"A": 1}})
         results = Search(retrieval_pipeline).semantic_search("test query")
 
         self.assertEqual(
@@ -391,7 +391,7 @@ class TestSearch(unittest.TestCase):
         ).setup_bm25_pipeline()
 
         # Mock the part where the retrieval pipeline is run and return something unexpected (None)
-        when(retrieval_pipeline).run(...).thenReturn(None)
+        when(mock_pipeline).run(...).thenReturn(None)
         results = Search(retrieval_pipeline).bm25_search("test query")
 
         self.assertEqual(
@@ -399,7 +399,7 @@ class TestSearch(unittest.TestCase):
         )
 
         # Try with something returned that isn't None
-        when(retrieval_pipeline).run(...).thenReturn({"A": 1})
+        when(mock_pipeline).run(...).thenReturn({"A": 1})
         results = Search(retrieval_pipeline).bm25_search("test query")
 
         self.assertEqual(
@@ -407,7 +407,7 @@ class TestSearch(unittest.TestCase):
         )
 
         # Try with something that's only partially structured correctly
-        when(retrieval_pipeline).run(...).thenReturn(
+        when(mock_pipeline).run(...).thenReturn(
             {"bm25_retriever": {"A": 1}}
         )
         results = Search(retrieval_pipeline).bm25_search("test query")
@@ -429,7 +429,7 @@ class TestSearch(unittest.TestCase):
                 ]
             }
         }
-        when(retrieval_pipeline).run(...).thenReturn(mock_prediction)
+        when(mock_pipeline).run(...).thenReturn(mock_prediction)
         results = Search(retrieval_pipeline).bm25_search("test query")
 
         self.assertEqual(

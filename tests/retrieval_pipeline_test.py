@@ -19,19 +19,26 @@ from search_backend.retrieval_pipeline import RetrievalPipeline
 
 
 class TestRetrievalPipeline(unittest.TestCase):
+
     def setUp(self):
         self.mock_document_store = mock(OpenSearchDocumentStore)
         self.dense_embedding_model = "sentence-transformers/all-MiniLM-L6-v2"
         self.rerank_model = "cross-encoder/ms-marco-MiniLM-L-2-v2"
+
+    def create_mock_pipeline(self):
+        # Create a fresh mock pipeline
+        mock_pipeline = mock(Pipeline)
+        when(mock_pipeline).add_component(any(str), any())
+        when(mock_pipeline).connect(any(str), any(str))
+
+        return mock_pipeline
 
     def test_setup_hybrid_pipeline(self):
         """
         Verify components of hybrid retrieval pipeline get set up
         """
 
-        mock_pipeline = mock(Pipeline)
-        when(mock_pipeline).add_component(any(str), any())
-        when(mock_pipeline).connect(any(str), any(str))
+        mock_pipeline = self.create_mock_pipeline()
 
         RetrievalPipeline(
             self.mock_document_store,
@@ -68,9 +75,7 @@ class TestRetrievalPipeline(unittest.TestCase):
         Verify components of embedding retrieval pipeline get set up
         """
 
-        mock_pipeline = mock(Pipeline)
-        when(mock_pipeline).add_component(any(str), any())
-        when(mock_pipeline).connect(any(str), any(str))
+        mock_pipeline = self.create_mock_pipeline()
 
         RetrievalPipeline(
             self.mock_document_store,
@@ -99,9 +104,7 @@ class TestRetrievalPipeline(unittest.TestCase):
         Verify components of BM25 retrieval pipeline get set up
         """
 
-        mock_pipeline = mock(Pipeline)
-        when(mock_pipeline).add_component(any(str), any())
-        when(mock_pipeline).connect(any(str), any(str))
+        mock_pipeline = self.create_mock_pipeline()
 
         RetrievalPipeline(
             self.mock_document_store, retrieval=mock_pipeline
