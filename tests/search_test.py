@@ -407,9 +407,7 @@ class TestSearch(unittest.TestCase):
         )
 
         # Try with something that's only partially structured correctly
-        when(mock_pipeline).run(...).thenReturn(
-            {"bm25_retriever": {"A": 1}}
-        )
+        when(mock_pipeline).run(...).thenReturn({"bm25_retriever": {"A": 1}})
         results = Search(retrieval_pipeline).bm25_search("test query")
 
         self.assertEqual(
