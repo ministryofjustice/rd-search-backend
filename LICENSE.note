@@ -1,0 +1,7 @@
+The search_backend package as a whole is distributed under MIT license
+(see file LICENSE). The search_backend package includes open
+source data components. The following is a list of these components:
+
+* /./notebooks/demo_data.json This dataset is based on excerpts from Wikipedia:
+    [The Seven Wonders of the Ancient World (articles linked within table)](https://en.wikipedia.org/wiki/Seven_Wonders_of_the_Ancient_World#Wonders), distributed under
+    [Creative Commons Attribution-ShareAlike 4.0](http://creativecommons.org/licenses/by-sa/4.0/)
