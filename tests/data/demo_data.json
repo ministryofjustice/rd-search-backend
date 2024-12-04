@@ -1,0 +1,30 @@
+[
+    {
+        "meta": {"title": "Great Pyramid of Giza"},
+        "content": "The Great Pyramid of Giza is the largest Egyptian pyramid. It served as the tomb of pharaoh Khufu, who ruled during the Fourth Dynasty of the Old Kingdom. Built c. 2600 BC, over a period of about 26 years, the pyramid is the oldest of the Seven Wonders of the Ancient World, and the only wonder that has remained largely intact. It is the most famous monument of the Giza pyramid complex, which is part of the UNESCO World Heritage Site 'Memphis and its Necropolis'. It is situated at the northeastern end of the line of the three main pyramids at Giza."
+    },
+    {
+        "meta": {"title": "Hanging Gardens of Babylon"},
+        "content": "The Hanging Gardens of Babylon were one of the Seven Wonders of the Ancient World listed by Hellenic culture. They were described as a remarkable feat of engineering with an ascending series of tiered gardens containing a wide variety of trees, shrubs, and vines, resembling a large green mountain constructed of mud bricks. It was said to have been built in the ancient city of Babylon, near present-day Hillah, Babil province, in Iraq. The Hanging Gardens' name is derived from the Greek word κρεμαστός (kremastós, lit. 'overhanging'), which has a broader meaning than the modern English word 'hanging' and refers to trees being planted on a raised structure such as a terrace."
+    },
+    {
+        "meta": {"title": "Statue of Zeus at Olympia"},
+        "content": "The Statue of Zeus at Olympia was a giant seated figure, about 12.4 m (41 ft) tall, made by the Greek sculptor Phidias around 435 BC at the sanctuary of Olympia, Greece, and erected in the Temple of Zeus there. Zeus is the sky and thunder god in ancient Greek religion, who rules as king of the gods on Mount Olympus."
+    },
+    {
+        "meta": {"title": "Temple of Artemis"},
+        "content": "The Temple of Artemis or Artemision (Greek: Ἀρτεμίσιον; Turkish: Artemis Tapınağı), also known as the Temple of Diana, was a Greek temple dedicated to an ancient, localised form of the goddess Artemis (equated with the Roman goddess Diana). It was located in Ephesus (near the modern town of Selçuk in present-day Turkey). By AD 401 it is belived it had been ruined or destroyed.[1] Only foundations and fragments of the last temple remain at the site. "
+    },
+    {
+        "meta": {"title": "Mausoleum at Halicarnassus"},
+        "content": "The Mausoleum at Halicarnassus or Tomb of Mausolus[a] (Ancient Greek: Μαυσωλεῖον τῆς Ἁλικαρνασσοῦ; Turkish: Halikarnas Mozolesi) was a tomb built between 353 and 351 BC in Halicarnassus (present Bodrum, Turkey) for Mausolus, an Anatolian from Caria and a satrap in the Achaemenid Persian Empire, and his sister-wife Artemisia II of Caria. The structure was designed by the Greek architects Satyros and Pythius of Priene. Its elevated tomb structure is derived from the tombs of neighbouring Lycia, a territory Mausolus had invaded and annexed c. 360 BC, such as the Nereid Monument."
+    },
+    {
+        "meta": {"title": "Colossus of Rhodes"},
+        "content": "The Colossus of Rhodes (Ancient Greek: ὁ Κολοσσὸς Ῥόδιος, romanized: ho Kolossòs Rhódios; Modern Greek: Κολοσσός της Ρόδου, romanized: Kolossós tis Ródou) was a statue of the Greek sun god Helios, erected in the city of Rhodes, on the Greek island of the same name, by Chares of Lindos in 280 BC. One of the Seven Wonders of the Ancient World, it was constructed to celebrate the successful defence of Rhodes city against an attack by Demetrius I of Macedon, who had besieged it for a year with a large army and navy."
+    },
+    {
+        "meta": {"title": "Lighthouse of Alexandria"},
+        "content": "The Lighthouse of Alexandria, sometimes called the Pharos of Alexandria (/ˈfɛərɒs/ FAIR-oss; Ancient Greek: ὁ Φάρος τῆς Ἀλεξανδρείας, romanized: ho Pháros tês Alexandreías, contemporary Koine Greek pronunciation: [ho pʰáros tɛ̂ːs aleksandrěːaːs]; Arabic: فنار الإسكندرية), was a lighthouse built by the Ptolemaic Kingdom of Ancient Egypt, during the reign of Ptolemy II Philadelphus (280–247 BC). It has been estimated to have been at least 100 metres (330 ft) in overall height. One of the Seven Wonders of the Ancient World, for many centuries it was one of the tallest man-made structures in the world."
+    }
+]

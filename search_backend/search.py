@@ -19,8 +19,7 @@ class Search:
 
     def __init__(self, pipeline: Pipeline):
         """
-        Args:
-            :pipeline: The pipeline to use. This should be defined using the RetrievalPipeline() class.
+        :param pipeline: The pipeline to use. This should be defined using the RetrievalPipeline() class.
         """
 
         self.pipeline = pipeline
