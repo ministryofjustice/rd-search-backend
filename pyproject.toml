@@ -47,6 +47,7 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = [
+    "boto3",
     "coverage==7.6.4",
     "pip-tools",
     "ipykernel==6.29.5",
@@ -58,7 +59,6 @@ dev = [
     "pre-commit==4.0.0",
 ]
 data_read = [
-    "boto3",
     "s3fs==2024.10.0",
     "pdfminer.six==20240706",
     "python-docx>=1.1.2, <2",
