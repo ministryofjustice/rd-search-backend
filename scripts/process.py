@@ -4,10 +4,10 @@ Example entry point for the data processing and setting up a Document Store for 
 
 from haystack import Document
 
-from search_backend.config import get_config
+from scripts.config import get_config
 from search_backend.indexing_pipeline import IndexingPipeline
-from search_backend.read_data_functions import read_docs
-from search_backend.services import SERVICES
+from scripts.read_data_functions import read_docs
+from scripts.services import SERVICES
 
 cfg = get_config()
 

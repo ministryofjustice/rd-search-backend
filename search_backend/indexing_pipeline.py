@@ -20,7 +20,7 @@ class IndexingPipeline:
     def __init__(
         self,
         document_store: OpenSearchDocumentStore,
-        dense_embedding_model: str,
+        dense_embedding_model: str = None,
         semantic: bool = False,
         indexing: Pipeline = None,
         split_length: int = 64,
