@@ -11,12 +11,12 @@ class TestAWSSession(unittest.TestCase):
         """
         Test assuming we're running locally and have access and secret access keys defined.
         """
-        
+
         config = {
             "AWS_WEB_IDENTITY_TOKEN_FILE": None,
             "AWS_ROLE_ARN": None,
             "AWS_ACCESS_KEY_ID": "DUMMY_KEY_ID_1",
-            "AWS_SECRET_ACCESS_KEY": "DUMMY_SECRET_KEY_1",
+            "AWS_SECRET_ACCESS_KEY": "DUMMY_SECRET_KEY_1",  # pragma: allowlist-secret
             "AWS_REGION": None,
         }
 
@@ -37,23 +37,25 @@ class TestAWSSession(unittest.TestCase):
             "AWS_WEB_IDENTITY_TOKEN_FILE": "tests/.dummy_token",
             "AWS_ROLE_ARN": "01234567890123456789",
             "AWS_ACCESS_KEY_ID": "DUMMY_KEY_ID_2",
-            "AWS_SECRET_ACCESS_KEY": "DUMMY_SECRET_KEY_2",
+            "AWS_SECRET_ACCESS_KEY": "DUMMY_SECRET_KEY_2",  # pragma: allowlist-secret
             "AWS_REGION": "DUMMY_REGION",
         }
 
         mock_role = {
-            'Credentials': {
-                'AccessKeyId': config.get("AWS_ACCESS_KEY_ID"),
-                'SecretAccessKey': config.get("AWS_SECRET_ACCESS_KEY"),
-                'SessionToken': "00000000000000000000",
-                'Expiration': datetime(2015, 1, 1)
+            "Credentials": {
+                "AccessKeyId": config.get("AWS_ACCESS_KEY_ID"),
+                "SecretAccessKey": config.get("AWS_SECRET_ACCESS_KEY"),
+                "SessionToken": "00000000000000000000",
+                "Expiration": datetime(2015, 1, 1),
             },
         }
 
         sts_client_mock = mock()
 
         when(boto3).client("sts").thenReturn(sts_client_mock)
-        when(sts_client_mock).assume_role_with_web_identity(...).thenReturn(mock_role)
+        when(sts_client_mock).assume_role_with_web_identity(...).thenReturn(
+            mock_role
+        )
 
         aws_session = get_aws_session(config, config.get("AWS_REGION"))
         credentials = aws_session.get_credentials()
