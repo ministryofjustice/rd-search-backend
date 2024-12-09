@@ -8,11 +8,11 @@ Example of usage:
 
 import argparse
 
-from search_backend.config import get_config
-from search_backend.services import SERVICES
+from scripts.config import get_config
+from scripts.services import SERVICES
 from search_backend.retrieval_pipeline import RetrievalPipeline
 from search_backend.search import Search
-from search_backend.search_formatting_functions import pretty_print_results
+from scripts.search_formatting_functions import pretty_print_results
 
 cfg = get_config()
 
