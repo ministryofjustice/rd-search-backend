@@ -34,11 +34,10 @@ class RetrievalPipeline:
         retrieval: Pipeline = None,
     ):
         """
-        Args:
-        :document_store: An Haystack/OpenSearch document store object, set up elsewhere.
-        :dense_embedding_model: Name of the embedding model to use (assumes model is available from HuggingFace)
+        :param document_store: An Haystack/OpenSearch document store object, set up elsewhere.
+        :param dense_embedding_model: Name of the embedding model to use (assumes model is available from HuggingFace)
             for a semantic/hybrid search. Leave blank if using a BM25 search.
-        :rerank_model: Name of the reranker/cross-encoder model to use (assumes model is available from HuggingFace)
+        :param rerank_model: Name of the reranker/cross-encoder model to use (assumes model is available from HuggingFace)
             for a semantic/hybrid search
         :param retrieval: pipeline to do the retrieval, which will be configured in this constructor
         """
@@ -78,32 +77,30 @@ class RetrievalPipeline:
         :return: Returns the pipeline object which can then be used to search the data for matches to a particular query.
         """
 
-        hybrid_retrieval = self.retrieval
-
-        hybrid_retrieval.add_component(
+        self.retrieval.add_component(
             "dense_text_embedder", self.dense_text_embedder
         )
-        hybrid_retrieval.add_component("bm25_retriever", self.bm25_retriever)
-        hybrid_retrieval.add_component(
+        self.retrieval.add_component("bm25_retriever", self.bm25_retriever)
+        self.retrieval.add_component(
             "embedding_retriever", self.embedding_retriever
         )
-        hybrid_retrieval.add_component(
+        self.retrieval.add_component(
             "document_joiner",
             DocumentJoiner(join_mode="reciprocal_rank_fusion"),
         )
-        hybrid_retrieval.add_component(
+        self.retrieval.add_component(
             "ranker", TransformersSimilarityRanker(model=self.rerank_model)
         )
 
-        hybrid_retrieval.connect(
+        self.retrieval.connect(
             "dense_text_embedder.embedding",
             "embedding_retriever.query_embedding",
         )
-        hybrid_retrieval.connect("bm25_retriever", "document_joiner")
-        hybrid_retrieval.connect("embedding_retriever", "document_joiner")
-        hybrid_retrieval.connect("document_joiner", "ranker")
+        self.retrieval.connect("bm25_retriever", "document_joiner")
+        self.retrieval.connect("embedding_retriever", "document_joiner")
+        self.retrieval.connect("document_joiner", "ranker")
 
-        return hybrid_retrieval
+        return self.retrieval
 
     def setup_semantic_pipeline(self) -> Pipeline:
         """
@@ -112,25 +109,23 @@ class RetrievalPipeline:
         :return: Returns the pipeline object which can then be used to search the data for matches to a particular query.
         """
 
-        retrieval = self.retrieval
-
-        retrieval.add_component(
+        self.retrieval.add_component(
             "dense_text_embedder", self.dense_text_embedder
         )
-        retrieval.add_component(
+        self.retrieval.add_component(
             "embedding_retriever", self.embedding_retriever
         )
-        retrieval.add_component(
+        self.retrieval.add_component(
             "ranker", TransformersSimilarityRanker(model=self.rerank_model)
         )
 
-        retrieval.connect(
+        self.retrieval.connect(
             "dense_text_embedder.embedding",
             "embedding_retriever.query_embedding",
         )
-        retrieval.connect("embedding_retriever", "ranker")
+        self.retrieval.connect("embedding_retriever", "ranker")
 
-        return retrieval
+        return self.retrieval
 
     def setup_bm25_pipeline(self) -> Pipeline:
         """
@@ -139,7 +134,6 @@ class RetrievalPipeline:
         :return: Returns the pipeline object which can then be used to search the data for matches to a particular query.
         """
 
-        bm25_retrieval = self.retrieval
-        bm25_retrieval.add_component("bm25_retriever", self.bm25_retriever)
+        self.retrieval.add_component("bm25_retriever", self.bm25_retriever)
 
-        return bm25_retrieval
+        return self.retrieval

@@ -9,9 +9,9 @@ from opensearchpy import (
     Urllib3AWSV4SignerAuth,
 )
 
-from search_backend.config import get_config
+from scripts.config import get_config
 from search_backend.aws import get_aws_session
-from search_backend.s3client import S3Client
+from scripts.s3client import S3Client
 
 
 # S3 needs a specific region if we're using Analytical Platform buckets
