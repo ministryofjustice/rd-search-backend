@@ -53,7 +53,9 @@ class Search:
                 ],
             }
             ```
-        :param top_k: How many results to return.
+        :param bm25_top_k: How many results to return from the BM25 retrieval (set to None
+            to retrieve all).
+        :param semantic_top_k: How many results to return from the dense embedding retrieval.
         :param threshold: Set a threshold match score (between 0 and 1)
 
         :return: A list of ranked search results.
