@@ -9,16 +9,18 @@ class ThresholdScore:
     """
 
     @component.output_types(documents=List[Document])
-    def run(
-        self,
-        documents: List[Document],
-        score_threshold: float = 0.0
-    ):
-        
+    def run(self, documents: List[Document], score_threshold: float = 0.0):
+
         if not documents:
             return {"documents": []}
-        
-        if score_threshold < 0 or score_threshold > 1:
-            raise ValueError(f"threshold must be between 0 and 1 (inclusive), but got {score_threshold}")
 
-        return {"documents": [doc for doc in documents if doc.score > score_threshold]}
+        if score_threshold < 0 or score_threshold > 1:
+            raise ValueError(
+                f"threshold must be between 0 and 1 (inclusive), but got {score_threshold}"
+            )
+
+        return {
+            "documents": [
+                doc for doc in documents if doc.score > score_threshold
+            ]
+        }

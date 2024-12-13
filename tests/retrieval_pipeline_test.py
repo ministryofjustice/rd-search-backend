@@ -99,9 +99,7 @@ class TestRetrievalPipeline(unittest.TestCase):
         verify(mock_pipeline).add_component(
             "ranker", any(TransformersSimilarityRanker)
         )
-        verify(mock_pipeline).add_component(
-            "threshold", any(ThresholdScore)
-        )
+        verify(mock_pipeline).add_component("threshold", any(ThresholdScore))
         verify(mock_pipeline).connect(
             "dense_text_embedder.embedding",
             "embedding_retriever.query_embedding",

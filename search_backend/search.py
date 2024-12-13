@@ -76,7 +76,6 @@ class Search:
                 },
                 "ranker": {"query": search_query},
                 "semantic_threshold": {"score_threshold": threshold},
-                
             }
         )
 
@@ -131,7 +130,7 @@ class Search:
                     "top_k": top_k,
                 },
                 "ranker": {"query": search_query, "top_k": top_k},
-                "threshold": {"score_threshold": threshold}
+                "threshold": {"score_threshold": threshold},
             }
         )
 

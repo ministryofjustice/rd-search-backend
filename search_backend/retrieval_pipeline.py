@@ -100,7 +100,7 @@ class RetrievalPipeline:
         )
         self.retrieval.connect("bm25_retriever", "document_joiner")
         self.retrieval.connect("embedding_retriever", "ranker")
-        self.retrieval.connect("ranker", "semantic_threshold.documents")  
+        self.retrieval.connect("ranker", "semantic_threshold.documents")
         self.retrieval.connect("semantic_threshold", "document_joiner")
 
         return self.retrieval
