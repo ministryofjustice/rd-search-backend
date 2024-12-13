@@ -15,7 +15,7 @@ class TestThresholdScore(unittest.TestCase):
         self.mock_document_store = mock(OpenSearchDocumentStore)
         self.dense_embedding_model = "sentence-transformers/all-MiniLM-L6-v2"
         self.rerank_model = "cross-encoder/ms-marco-MiniLM-L-2-v2"
-        
+
         # Mock some search results
         mock_prediction = [
             {"content": "high score", "score": 0.8},
@@ -26,7 +26,6 @@ class TestThresholdScore(unittest.TestCase):
             for doc in mock_prediction
         ]
 
-
     def test_threshold_score_filter(self):
         """
         Test that only search results with a score over a defined threshold are returned by the search.
@@ -34,7 +33,9 @@ class TestThresholdScore(unittest.TestCase):
 
         # Use a threshold where we expect 1 result
         threshold = 0.4
-        results = ThresholdScore().run(documents=self.mock_prediction, score_threshold=threshold)
+        results = ThresholdScore().run(
+            documents=self.mock_prediction, score_threshold=threshold
+        )
         results = results["documents"]
 
         self.assertEqual(
@@ -55,11 +56,15 @@ class TestThresholdScore(unittest.TestCase):
 
         threshold = -1
         with self.assertRaises(ValueError):
-            ThresholdScore().run(documents=self.mock_prediction, score_threshold=threshold)
+            ThresholdScore().run(
+                documents=self.mock_prediction, score_threshold=threshold
+            )
 
         threshold = 1.1
         with self.assertRaises(ValueError):
-            ThresholdScore().run(documents=self.mock_prediction, score_threshold=threshold)
+            ThresholdScore().run(
+                documents=self.mock_prediction, score_threshold=threshold
+            )
 
     def test_no_input(self):
         """
