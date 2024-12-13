@@ -35,7 +35,8 @@ class Search:
         self,
         search_query: str,
         filters: dict = None,
-        top_k: int = 10,
+        bm25_top_k: int = None,
+        semantic_top_k: int = 10,
         threshold: float = 0.0,
     ):
         """
@@ -67,31 +68,27 @@ class Search:
                 "bm25_retriever": {
                     "query": search_query,
                     "filters": filters,
-                    "top_k": top_k,
+                    "top_k": bm25_top_k,
                 },
                 "embedding_retriever": {
                     "filters": filters,
-                    "top_k": top_k,
+                    "top_k": semantic_top_k,
                 },
-                "ranker": {"query": search_query, "top_k": top_k},
+                "ranker": {"query": search_query},
+                "semantic_threshold": {"score_threshold": threshold},
+                
             }
         )
 
         # Return an empty list if an unexpected object is returned by the pipeline
         if prediction is None:
             return []
-        elif "ranker" not in prediction:
+        elif "document_joiner" not in prediction:
             return []
-        elif "documents" not in prediction["ranker"]:
+        elif "documents" not in prediction["document_joiner"]:
             return []
         else:
-            results = prediction["ranker"]["documents"]
-
-        # Filter by threshold score
-        if threshold > 0:
-            results = [
-                result for result in results if result.score > threshold
-            ]
+            results = prediction["document_joiner"]["documents"]
 
         return results
 
@@ -134,24 +131,25 @@ class Search:
                     "top_k": top_k,
                 },
                 "ranker": {"query": search_query, "top_k": top_k},
+                "threshold": {"score_threshold": threshold}
             }
         )
 
         # Return an empty list if an unexpected object is returned by the pipeline
         if prediction is None:
             return []
-        elif "ranker" not in prediction:
+        elif "threshold" not in prediction:
             return []
-        elif "documents" not in prediction["ranker"]:
+        elif "documents" not in prediction["threshold"]:
             return []
         else:
-            results = prediction["ranker"]["documents"]
+            results = prediction["threshold"]["documents"]
 
-        # Filter by threshold score
-        if threshold > 0:
-            results = [
-                result for result in results if result.score > threshold
-            ]
+        # # Filter by threshold score
+        # if threshold > 0:
+        #     results = [
+        #         result for result in results if result.score > threshold
+        #     ]
 
         return results
 
