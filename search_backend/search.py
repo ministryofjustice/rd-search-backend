@@ -161,12 +161,6 @@ class Search:
         else:
             results = prediction["threshold"]["documents"]
 
-        # # Filter by threshold score
-        # if threshold > 0:
-        #     results = [
-        #         result for result in results if result.score > threshold
-        #     ]
-
         return results
 
     def bm25_search(
