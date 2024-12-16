@@ -307,3 +307,61 @@ class TestSearch(unittest.TestCase):
         self.assertEqual(
             len(results), 2, f"Expected 2 results but got {len(results)}"
         )
+
+    def test_hybrid_search_top_k(self):
+        """
+        Test that top_k results are returned by the hybrid search.
+        """
+
+        # Create a fresh mock pipeline
+        mock_pipeline = self.create_mock_pipeline()
+
+        # Mock the search results
+        mock_prediction = [
+            {"content": "test result 1", "score": 0.8},
+            {"content": "test result 2", "score": 0.4},
+            {"content": "test result 3", "score": 0.3},
+        ]
+        mock_prediction = {
+            "document_joiner": {
+                "documents": [
+                    Document(content=doc["content"], score=doc["score"])
+                    for doc in mock_prediction
+                ]
+            }
+        }
+
+        # Set up the Search instance
+        hybrid_pipeline = RetrievalPipeline(
+            self.mock_document_store,
+            self.dense_embedding_model,
+            self.rerank_model,
+            retrieval=mock_pipeline,
+        ).setup_hybrid_pipeline()
+
+        # Mock the part where the retrieval pipeline is run
+        when(mock_pipeline).run(...).thenReturn(mock_prediction)
+        hybrid_pipeline_init = Search(hybrid_pipeline)
+
+        # Use a top_k where we expect all 3 results
+        results = hybrid_pipeline_init.hybrid_search(
+            "test query",
+        )
+
+        self.assertEqual(
+            len(results),
+            3,
+            f"Expected 3 results but got {len(results)}",
+        )
+
+        # Use a top_k where we expect 2 results
+        results = hybrid_pipeline_init.hybrid_search("test query", top_k=2)
+
+        self.assertEqual(
+            len(results), 2, f"Expected 2 results but got {len(results)}"
+        )
+        self.assertEqual(
+            results[0].content,
+            "test result 1",
+            f"Expected content 'test result 1', got {results[0].content}",
+        )

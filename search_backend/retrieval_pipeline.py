@@ -73,9 +73,19 @@ class RetrievalPipeline:
 
     def setup_hybrid_pipeline(self) -> Pipeline:
         """
-        This function sets up the hybrid retrieval pipeline based on an existing document store.
+        This function sets up the hybrid retrieval pipeline based on an existing document
+        store.
 
-        :return: Returns the pipeline object which can then be used to search the data for matches to a particular query.
+        Notes:
+         - Although a reranker is used, it is only applied to the dense embedding retrieval
+           (prior to joining with results from the BM25 retrieval). This is because the
+           pipeline is set up to allow all matches to be returned from the BM25 retrieval,
+           and if there are many matches it would cause the reranking stage to be very slow.
+         - Results from the BM25 and embedding retrieval are joined using reciprocal rank
+           fusion
+
+        :return: Returns the pipeline object which can then be used to search the data for
+            matches to a particular query.
         """
 
         self.retrieval.add_component(
