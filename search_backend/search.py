@@ -63,7 +63,8 @@ class Search:
         :param top_k: How many results to return from the overall hybrid retrieval (if None
             then the upper limit for the total number of results will be bm25_top_k +
             semantic_top_k).
-        :param threshold: Set a threshold match score (between 0 and 1) for the semantic search.
+        :param threshold: Set a threshold match score (a float between 0 and 1) for the
+            semantic search.
 
         :return: A list of ranked search results.
         """
@@ -127,7 +128,8 @@ class Search:
             }
             ```
         :param top_k: How many results to return.
-        :param threshold: Set a threshold match score (between 0 and 1)
+        :param threshold: Set a threshold match score (a float between 0 and 1) for the
+            semantic search.
 
         :return: A list of ranked search results.
         """

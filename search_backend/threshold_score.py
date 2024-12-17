@@ -16,7 +16,7 @@ class ThresholdScore:
 
         if score_threshold < 0 or score_threshold > 1:
             raise ValueError(
-                f"threshold must be between 0 and 1 (inclusive), but got {score_threshold}"
+                f"score_threshold must be a float between 0 and 1 (inclusive), but got {score_threshold}"
             )
 
         return {
