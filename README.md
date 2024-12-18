@@ -136,7 +136,7 @@ for doc in results:
 Hybrid:
 ```
 test_query = "wonder that features plants"
-results = hybrid_search_init.hybrid_search(test_query, top_k=3, threshold=0.00001)
+results = hybrid_search_init.hybrid_search(test_query, bm25_top_k=3, semantic_top_k=3, threshold=0.00001)
 
 for doc in results:
     print(f'{doc.meta["title"]} - Score: {doc.score}')

@@ -35,11 +35,14 @@ class Search:
         self,
         search_query: str,
         filters: dict = None,
-        top_k: int = 10,
+        bm25_top_k: int = 10,
+        semantic_top_k: int = 10,
+        top_k: int = None,
         threshold: float = 0.0,
-    ):
+    ) -> list:
         """
-        Run a hybrid search pipeline and return results.
+        Run a hybrid search pipeline and return results. See `setup_hybrid_pipeline()`
+        for details on the hybrid search pipeline.
 
         :param search_query: The search query in the form of a text string.
         :param filters: Metadata filters. These should be formatted like:
@@ -52,8 +55,16 @@ class Search:
                 ],
             }
             ```
-        :param top_k: How many results to return.
-        :param threshold: Set a threshold match score (between 0 and 1)
+        :param bm25_top_k: How many results to return from the BM25 retrieval (the
+            OpenSearchBM25Retriever class that this is based on has a default top_k of 10,
+            so set this to a value equal to the number of records in the document store to
+            retrieve all matches).
+        :param semantic_top_k: How many results to return from the dense embedding retrieval.
+        :param top_k: How many results to return from the overall hybrid retrieval (if None
+            then the upper limit for the total number of results will be bm25_top_k +
+            semantic_top_k).
+        :param threshold: Set a threshold match score (a float between 0 and 1) for the
+            semantic search.
 
         :return: A list of ranked search results.
         """
@@ -67,31 +78,31 @@ class Search:
                 "bm25_retriever": {
                     "query": search_query,
                     "filters": filters,
-                    "top_k": top_k,
+                    "top_k": bm25_top_k,
                 },
                 "embedding_retriever": {
                     "filters": filters,
-                    "top_k": top_k,
+                    "top_k": semantic_top_k,
                 },
-                "ranker": {"query": search_query, "top_k": top_k},
+                "ranker": {
+                    "query": search_query,
+                    "top_k": semantic_top_k,
+                },
+                "semantic_threshold": {"score_threshold": threshold},
             }
         )
 
         # Return an empty list if an unexpected object is returned by the pipeline
         if prediction is None:
             return []
-        elif "ranker" not in prediction:
+        elif "document_joiner" not in prediction:
             return []
-        elif "documents" not in prediction["ranker"]:
+        elif "documents" not in prediction["document_joiner"]:
             return []
         else:
-            results = prediction["ranker"]["documents"]
-
-        # Filter by threshold score
-        if threshold > 0:
-            results = [
-                result for result in results if result.score > threshold
-            ]
+            results = prediction["document_joiner"]["documents"]
+            if top_k is not None:
+                results = results[:top_k]
 
         return results
 
@@ -101,7 +112,7 @@ class Search:
         filters: dict = None,
         top_k: int = 10,
         threshold: float = 0.0,
-    ):
+    ) -> list:
         """
         Run a semantic search pipeline and return results.
 
@@ -117,7 +128,8 @@ class Search:
             }
             ```
         :param top_k: How many results to return.
-        :param threshold: Set a threshold match score (between 0 and 1)
+        :param threshold: Set a threshold match score (a float between 0 and 1) for the
+            semantic search.
 
         :return: A list of ranked search results.
         """
@@ -133,31 +145,29 @@ class Search:
                     "filters": filters,
                     "top_k": top_k,
                 },
-                "ranker": {"query": search_query, "top_k": top_k},
+                "ranker": {
+                    "query": search_query,
+                    "top_k": top_k,
+                },
+                "threshold": {"score_threshold": threshold},
             }
         )
 
         # Return an empty list if an unexpected object is returned by the pipeline
         if prediction is None:
             return []
-        elif "ranker" not in prediction:
+        elif "threshold" not in prediction:
             return []
-        elif "documents" not in prediction["ranker"]:
+        elif "documents" not in prediction["threshold"]:
             return []
         else:
-            results = prediction["ranker"]["documents"]
-
-        # Filter by threshold score
-        if threshold > 0:
-            results = [
-                result for result in results if result.score > threshold
-            ]
+            results = prediction["threshold"]["documents"]
 
         return results
 
     def bm25_search(
-        self, search_query: str, filters: dict = None, top_k: int = 100
-    ):
+        self, search_query: str, filters: dict = None, top_k: int = 10
+    ) -> list:
         """
         Run a BM25 search pipeline and return results.
 

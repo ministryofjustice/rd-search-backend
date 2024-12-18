@@ -16,6 +16,7 @@ from haystack_integrations.components.retrievers.opensearch import (
 from haystack_integrations.document_stores.opensearch import (
     OpenSearchDocumentStore,
 )
+from search_backend.threshold_score import ThresholdScore
 
 
 class RetrievalPipeline:
@@ -72,9 +73,19 @@ class RetrievalPipeline:
 
     def setup_hybrid_pipeline(self) -> Pipeline:
         """
-        This function sets up the hybrid retrieval pipeline based on an existing document store.
+        This function sets up the hybrid retrieval pipeline based on an existing document
+        store.
 
-        :return: Returns the pipeline object which can then be used to search the data for matches to a particular query.
+        Notes:
+         - Although a reranker is used, it is only applied to the dense embedding retrieval
+           (prior to joining with results from the BM25 retrieval). This is because the
+           pipeline is set up to allow all matches to be returned from the BM25 retrieval,
+           and if there are many matches it would cause the reranking stage to be very slow.
+         - Results from the BM25 and embedding retrieval are joined using reciprocal rank
+           fusion
+
+        :return: Returns the pipeline object which can then be used to search the data for
+            matches to a particular query.
         """
 
         self.retrieval.add_component(
@@ -85,11 +96,12 @@ class RetrievalPipeline:
             "embedding_retriever", self.embedding_retriever
         )
         self.retrieval.add_component(
+            "ranker", TransformersSimilarityRanker(model=self.rerank_model)
+        )
+        self.retrieval.add_component("semantic_threshold", ThresholdScore())
+        self.retrieval.add_component(
             "document_joiner",
             DocumentJoiner(join_mode="reciprocal_rank_fusion"),
-        )
-        self.retrieval.add_component(
-            "ranker", TransformersSimilarityRanker(model=self.rerank_model)
         )
 
         self.retrieval.connect(
@@ -97,8 +109,9 @@ class RetrievalPipeline:
             "embedding_retriever.query_embedding",
         )
         self.retrieval.connect("bm25_retriever", "document_joiner")
-        self.retrieval.connect("embedding_retriever", "document_joiner")
-        self.retrieval.connect("document_joiner", "ranker")
+        self.retrieval.connect("embedding_retriever", "ranker")
+        self.retrieval.connect("ranker", "semantic_threshold.documents")
+        self.retrieval.connect("semantic_threshold", "document_joiner")
 
         return self.retrieval
 
@@ -118,12 +131,14 @@ class RetrievalPipeline:
         self.retrieval.add_component(
             "ranker", TransformersSimilarityRanker(model=self.rerank_model)
         )
+        self.retrieval.add_component("threshold", ThresholdScore())
 
         self.retrieval.connect(
             "dense_text_embedder.embedding",
             "embedding_retriever.query_embedding",
         )
         self.retrieval.connect("embedding_retriever", "ranker")
+        self.retrieval.connect("ranker", "threshold.documents")
 
         return self.retrieval
 

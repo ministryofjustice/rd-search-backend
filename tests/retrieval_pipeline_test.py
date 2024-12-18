@@ -16,6 +16,7 @@ from haystack_integrations.document_stores.opensearch import (
 from mockito import mock, when, verify, any
 
 from search_backend.retrieval_pipeline import RetrievalPipeline
+from search_backend.threshold_score import ThresholdScore
 
 
 class TestRetrievalPipeline(unittest.TestCase):
@@ -57,18 +58,23 @@ class TestRetrievalPipeline(unittest.TestCase):
             "embedding_retriever", any(OpenSearchEmbeddingRetriever)
         )
         verify(mock_pipeline).add_component(
-            "document_joiner", any(DocumentJoiner)
-        )
-        verify(mock_pipeline).add_component(
             "ranker", any(TransformersSimilarityRanker)
         )
+        verify(mock_pipeline).add_component(
+            "semantic_threshold", any(ThresholdScore)
+        )
+        verify(mock_pipeline).add_component(
+            "document_joiner", any(DocumentJoiner)
+        )
+
         verify(mock_pipeline).connect(
             "dense_text_embedder.embedding",
             "embedding_retriever.query_embedding",
         )
         verify(mock_pipeline).connect("bm25_retriever", "document_joiner")
-        verify(mock_pipeline).connect("embedding_retriever", "document_joiner")
-        verify(mock_pipeline).connect("document_joiner", "ranker")
+        verify(mock_pipeline).connect("embedding_retriever", "ranker")
+        verify(mock_pipeline).connect("ranker", "semantic_threshold.documents")
+        verify(mock_pipeline).connect("semantic_threshold", "document_joiner")
 
     def test_setup_semantic_pipeline(self):
         """
@@ -93,11 +99,13 @@ class TestRetrievalPipeline(unittest.TestCase):
         verify(mock_pipeline).add_component(
             "ranker", any(TransformersSimilarityRanker)
         )
+        verify(mock_pipeline).add_component("threshold", any(ThresholdScore))
         verify(mock_pipeline).connect(
             "dense_text_embedder.embedding",
             "embedding_retriever.query_embedding",
         )
         verify(mock_pipeline).connect("embedding_retriever", "ranker")
+        verify(mock_pipeline).connect("ranker", "threshold.documents")
 
     def test_setup_bm25_pipeline(self):
         """
