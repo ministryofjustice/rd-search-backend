@@ -22,7 +22,7 @@ jobs:
         pip install '.[dev]'
 
     - name: pre-commit
-      uses: actions/cache@2cdf405574d6ef1f33a1d12acccd3ae82f47b3f2 # sha for v4.1.0
+      uses: actions/cache@0c907a75c2c80ebcb7f088228285e798b750cf8f # sha for v4.2.1
       with:
         path: ~/.cache/pre-commit/
         key: pre-commit-4|${{ env.pythonLocation }}|${{ hashFiles('.pre-commit-config.yaml') }}
